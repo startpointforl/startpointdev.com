@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import TalkList from './TalkList.astro';
+import Portrait from './Portrait.astro';
 import { getTalks } from '../lib/content';
 import { SITE } from '../data/site';
 import { headline, about, skills, jobs } from '../data/cv';
@@ -10,55 +11,82 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const tr = t(lang);
 const talks = await getTalks();
+const [first, last] = SITE.author[lang].split(' ');
 ---
 
 <Base title={`${tr('cv.title')} · ${SITE.author[lang]}`} description={headline[lang]} lang={lang} type="profile">
-  <h1>{SITE.author[lang]}</h1>
-  <p class="headline">{headline[lang]}</p>
-  <p class="contacts small">
-    <a href={`mailto:${SITE.links.email}`}>{SITE.links.email}</a>
-    <a href={SITE.links.telegram}>Telegram</a>
-    <a href={SITE.links.linkedin}>LinkedIn</a>
-  </p>
+  <div class="cv wide">
+    <aside class="side">
+      <Portrait lang={lang} eager />
+      <h1 class="display">{first} <em>{last}</em></h1>
+      <p class="headline">{headline[lang]}</p>
+      <ul class="contacts mono">
+        <li><a href={`mailto:${SITE.links.email}`}>{SITE.links.email}</a></li>
+        <li><a href={SITE.links.telegram}>Telegram ↗</a></li>
+        <li><a href={SITE.links.linkedin}>LinkedIn ↗</a></li>
+      </ul>
+      <p class="mono label">{tr('cv.skills')}</p>
+      <p class="skills">{skills.map((s) => <span class="tag">{s}</span>)}</p>
+    </aside>
 
-  <h2>{tr('cv.about')}</h2>
-  {about[lang].map((p) => <p>{p}</p>)}
+    <div class="main">
+      <section>
+        <p class="mono label">{tr('cv.about')}</p>
+        {about[lang].map((p, i) => <p class={i === 0 ? 'intro' : ''}>{p}</p>)}
+      </section>
 
-  <h2>{tr('cv.skills')}</h2>
-  <p class="skills">{skills.map((s) => <span class="tag">{s}</span>)}</p>
+      <section>
+        <div class="section-head"><span class="num">01</span><h2>{tr('cv.experience')}</h2><span /></div>
+        <ol class="jobs">
+          {jobs.map((job) => (
+            <li>
+              <p class="period mono">{job.period[lang]}</p>
+              <div>
+                <h3>{job.role[lang]}</h3>
+                <p class="where mono">{job.company[lang]} — {job.project[lang]}</p>
+                {job.points[lang].length > 0 && <ul>{job.points[lang].map((p) => <li>{p}</li>)}</ul>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-  <h2>{tr('cv.experience')}</h2>
-  <ol class="jobs">
-    {jobs.map((job) => (
-      <li>
-        <div class="job-head">
-          <strong>{job.role[lang]}</strong>
-          <span class="meta">{job.period[lang]}</span>
-        </div>
-        <div class="meta">{job.company[lang]} · {job.project[lang]}</div>
-        {job.points[lang].length > 0 && (
-          <ul>{job.points[lang].map((p) => <li>{p}</li>)}</ul>
-        )}
-      </li>
-    ))}
-  </ol>
-
-  <h2>{tr('cv.talks')}</h2>
-  <TalkList talks={talks} lang={lang} />
+      <section>
+        <div class="section-head"><span class="num">02</span><h2>{tr('cv.talks')}</h2><span /></div>
+        <TalkList talks={talks} lang={lang} />
+      </section>
+    </div>
+  </div>
 </Base>
 
 <style>
-  .headline { font-size: 1.15rem; color: var(--muted); margin: 0; }
-  .contacts { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
-  .skills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .skills .tag { font-size: 0.85rem; padding: 0.2rem 0.65rem; }
+  .cv { display: grid; grid-template-columns: 17rem minmax(0, 1fr); gap: 4.5rem; padding-top: 3rem; }
+  .side { position: sticky; top: 2rem; align-self: start; }
+  .side h1 { font-size: 2.8rem; margin-top: 2.25rem; }
+  .headline { font-style: italic; color: var(--ink-2); margin: 0.6rem 0 0; }
+  .contacts { list-style: none; padding: 0.75rem 0; margin: 1.25rem 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); text-transform: none; letter-spacing: 0.02em; }
+  .contacts li + li { margin-top: 0.35rem; }
+  .label { color: var(--accent); margin: 0 0 0.75rem; }
+  .skills { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0; }
+  .main .intro { font-family: var(--display); font-size: 1.9rem; line-height: 1.2; font-weight: 500; margin-top: 0; }
+  .main .section-head { margin-top: 3.5rem; }
   .jobs { list-style: none; padding: 0; margin: 0; }
-  .jobs > li { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .jobs > li { display: grid; grid-template-columns: 11rem 1fr; gap: 1.25rem; padding: 1.25rem 0; border-bottom: 1px solid var(--rule-soft); }
   .jobs > li:last-child { border-bottom: 0; }
-  .job-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-  .jobs ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
-  .jobs ul li { margin: 0.25rem 0; font-size: 0.95rem; }
+  .period { color: var(--ink-2); margin: 0.35rem 0 0; }
+  .jobs h3 { font-family: var(--display); font-size: 1.6rem; font-weight: 600; line-height: 1.1; }
+  .where { margin: 0.3rem 0 0; color: var(--ink-2); text-transform: none; letter-spacing: 0.02em; }
+  .jobs ul { margin: 0.6rem 0 0; padding-left: 1.1rem; }
+  .jobs ul li { margin: 0.3rem 0; }
+  .jobs ul li::marker { color: var(--accent); }
+  @media (max-width: 860px) {
+    .cv { grid-template-columns: 1fr; gap: 2.5rem; padding-top: 2rem; }
+    .side { position: static; }
+    .side :global(.portrait) { max-width: 14rem; }
+    .jobs > li { grid-template-columns: 1fr; gap: 0.2rem; }
+  }
   @media print {
-    :global(header), :global(footer) { display: none; }
+    :global(.masthead), :global(.footer) { display: none; }
+    .cv { grid-template-columns: 12rem 1fr; gap: 2rem; }
   }
 </style>

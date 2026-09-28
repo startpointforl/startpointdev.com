@@ -1,13 +1,17 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
 import { SITE } from '../data/site';
-import { t, altPaths, type Lang } from '../i18n/ui';
+import { getArticles } from '../lib/content';
+import { t, altPaths, formatDate, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const tr = t(lang);
 const prefix = lang === 'en' ? '/en' : '';
 const path = Astro.url.pathname;
+// «Номер выпуска» = число опубликованных статей
+const issue = String((await getArticles()).length).padStart(2, '0');
+const today = formatDate(new Date(), lang, { day: '2-digit', month: '2-digit', year: 'numeric' });
 // Статьи только на русском, поэтому «Статьи» в EN-версии ведут на /blog/
 const nav = [
   { href: '/blog/', label: tr('nav.blog') },
@@ -15,36 +19,48 @@ const nav = [
   { href: `${prefix}/cv/`, label: tr('nav.cv') },
 ];
 const alt = altPaths[path] ?? (lang === 'ru' ? '/en/' : '/');
+const [first, last] = SITE.author[lang].split(' ');
 ---
 
-<header class="container header">
-  <a href={`${prefix}/`} class="brand">{SITE.author[lang]}</a>
-  <nav>
-    {nav.map((item) => (
-      <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
-    ))}
-  </nav>
-  <div class="tools">
-    <a href={alt} class="lang" hreflang={lang === 'ru' ? 'en' : 'ru'}>{tr('lang.switch')}</a>
-    <ThemeToggle label={tr('theme.toggle')} />
+<header class="masthead wide">
+  <div class="topline mono">
+    <span>startpointdev.com</span>
+    <span class="issue">{lang === 'ru' ? 'Выпуск' : 'Issue'} № {issue} · {today}</span>
+    <span class="tools">
+      <a href={alt} hreflang={lang === 'ru' ? 'en' : 'ru'}>{tr('lang.switch')}</a>
+      <ThemeToggle label={tr('theme.toggle')} />
+    </span>
+  </div>
+  <div class="bar">
+    <a href={`${prefix}/`} class="wordmark">{first} <em>{last}</em></a>
+    <nav class="mono">
+      {nav.map((item) => (
+        <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
   </div>
 </header>
 
 <style>
-  .header {
-    display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 1.25rem;
-    padding-top: 1.5rem; padding-bottom: 1.5rem; margin-bottom: 1.5rem;
-    font-size: 0.95rem;
+  .masthead { padding-top: 1rem; }
+  .topline {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding-bottom: 0.6rem; border-bottom: 1px solid var(--ink); color: var(--ink-2);
   }
-  .brand { font-weight: 700; color: var(--text); text-decoration: none; margin-right: auto; }
-  nav { display: flex; gap: 1rem; }
-  nav a { color: var(--muted); text-decoration: none; }
-  nav a:hover, nav a[aria-current='page'] { color: var(--text); }
-  .tools { display: flex; align-items: center; gap: 0.5rem; }
-  .lang { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-decoration: none; padding: 0.3rem 0.4rem; }
-  .lang:hover { color: var(--text); }
-  @media (max-width: 520px) {
-    .brand { flex-basis: 100%; }
-    nav { margin-right: auto; }
+  .tools { display: flex; align-items: center; gap: 0.9rem; }
+  .tools a { text-decoration: none; color: var(--ink); }
+  .bar {
+    display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 2rem;
+    padding: 0.9rem 0 0.8rem; border-bottom: 3px double var(--ink);
   }
+  .wordmark {
+    font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem, 4.5vw, 2.9rem);
+    line-height: 1; letter-spacing: -0.02em; text-decoration: none; color: var(--ink);
+  }
+  .wordmark em { font-style: italic; font-weight: 500; color: var(--accent); }
+  nav { display: flex; gap: 1.5rem; }
+  nav a { text-decoration: none; color: var(--ink); padding-bottom: 2px; border-bottom: 1.5px solid transparent; }
+  nav a:hover { color: var(--accent); }
+  nav a[aria-current='page'] { border-bottom-color: var(--accent); }
+  @media (max-width: 560px) { .issue { display: none; } }
 </style>

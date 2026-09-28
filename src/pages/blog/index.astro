@@ -7,6 +7,17 @@ const articles = await getArticles();
 ---
 
 <Base title="Статьи">
-  <h1>Статьи</h1>
-  <ArticleList articles={articles} />
+  <div class="wide">
+    <header class="page-head">
+      <h1 class="display">Статьи</h1>
+      <p class="lead">Разборы того, как устроены Node.js, V8, libuv, Next.js и браузеры.</p>
+    </header>
+    <ArticleList articles={articles} />
+  </div>
 </Base>
+
+<style>
+  .page-head { padding: 3.5rem 0 1.5rem; border-bottom: 3px solid var(--ink); margin-bottom: 0.5rem; }
+  h1 { font-size: clamp(3rem, 8vw, 6rem); }
+  .lead { margin: 1rem 0 0; }
+</style>

@@ -3,6 +3,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ShareButton from '../../components/ShareButton.astro';
 import { getArticles } from '../../lib/content';
+import { readingMinutes } from '../../lib/reading';
 import { SITE } from '../../data/site';
 import { formatDate } from '../../i18n/ui';
 
@@ -17,34 +18,47 @@ const { Content } = await render(article);
 const { title, description, date, updated, tags, cover, lang } = article.data;
 const ogImage = cover ?? `/og/${article.id}.png`;
 const url = new URL(Astro.url.pathname, Astro.site).toString();
+const minutes = readingMinutes(article.body);
 ---
 
 <Base title={title} description={description} lang={lang} type="article" ogImage={ogImage}
   publishedTime={date} modifiedTime={updated} tags={tags}>
-  <!-- Разметка рассчитана на шаблон Instant View: article > h1, .author, time, .article-body -->
+  <!-- Разметка рассчитана на шаблон Instant View: article h1, .author, time, .article-body -->
   <article class="article">
-    <header>
-      <h1>{title}</h1>
-      <p class="meta">
-        <span class="author">{SITE.author[lang]}</span>
+    <header class="head narrow">
+      <p class="mono kicker">{tags[0] ?? 'Статья'}</p>
+      <h1 class="display">{title}</h1>
+      <p class="lead">{description}</p>
+      <p class="byline mono">
+        <span>Текст: <span class="author">{SITE.author[lang]}</span></span>
         <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+        <span>{minutes} мин чтения</span>
       </p>
     </header>
-    <div class="article-body prose">
+    <div class="article-body prose dropcap narrow">
       <Content />
     </div>
-    <footer class="article-footer">
-      {tags.length > 0 && <div class="tags">{tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
-      <ShareButton url={url} />
+    <footer class="narrow">
+      <div class="article-footer">
+        {tags.length > 0 && <div class="tags">{tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
+        <ShareButton url={url} />
+      </div>
     </footer>
   </article>
 </Base>
 
 <style>
-  .article header { margin-bottom: 2rem; }
-  .article h1 { font-size: 2.3rem; }
-  .meta { display: flex; gap: 0.75rem; }
-  .article-footer { margin-top: 3rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+  .head { padding-top: 3.5rem; margin-bottom: 2.5rem; }
+  .kicker { color: var(--accent); margin: 0 0 1.25rem; }
+  h1 { font-size: clamp(2.6rem, 6.5vw, 4.4rem); }
+  .lead { margin: 1.5rem 0 0; }
+  .byline {
+    display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; margin: 2rem 0 0;
+    padding: 0.7rem 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); color: var(--ink-2);
+  }
+  .article-footer {
+    margin-top: 4rem; padding-top: 1.25rem; border-top: 3px solid var(--ink);
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+  }
   .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-  @media (max-width: 600px) { .article h1 { font-size: 1.8rem; } }
 </style>

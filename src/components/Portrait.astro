@@ -1,0 +1,39 @@
+---
+// Фото автора. Положи файл в src/assets/photo.(jpg|png|webp) — подхватится автоматически.
+// Пока файла нет, показывается заглушка с инициалами.
+import { Image } from 'astro:assets';
+import type { Lang } from '../i18n/ui';
+import { SITE } from '../data/site';
+
+interface Props { lang: Lang; caption?: string; eager?: boolean }
+const { lang, caption, eager = false } = Astro.props;
+const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/photo.{jpg,jpeg,png,webp,avif}', { eager: true });
+const photo = Object.values(photos)[0]?.default;
+---
+
+<figure class="portrait">
+  <div class="frame">
+    {photo ? (
+      <Image src={photo} alt={SITE.author[lang]} widths={[360, 720, 1080]} sizes="(max-width: 720px) 90vw, 360px"
+        loading={eager ? 'eager' : 'lazy'} class="img" />
+    ) : (
+      <div class="placeholder" role="img" aria-label={SITE.author[lang]}>
+        <span>{lang === 'ru' ? 'АК' : 'AK'}</span>
+      </div>
+    )}
+  </div>
+  {caption && <figcaption class="mono">{caption}</figcaption>}
+</figure>
+
+<style>
+  .portrait { margin: 0; }
+  .frame { position: relative; aspect-ratio: 4 / 5; }
+  /* Ультрамариновая плашка со сдвигом за фото */
+  .frame::before { content: ''; position: absolute; inset: 14px -14px -14px 14px; background: var(--accent); }
+  .img, .placeholder { position: relative; width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(0.15) contrast(1.05); }
+  .placeholder {
+    display: grid; place-items: center; background: var(--paper-2); border: 1.5px solid var(--ink);
+    font-family: var(--display); font-style: italic; font-size: 6rem; color: var(--ink-2);
+  }
+  figcaption { margin-top: 1.6rem; color: var(--ink-2); font-size: 0.68rem; }
+</style>

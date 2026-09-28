@@ -1,22 +1,47 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { formatDate, type Lang } from '../i18n/ui';
+import { readingMinutes } from '../lib/reading';
 
 interface Props { articles: CollectionEntry<'articles'>[]; lang?: Lang }
 const { articles, lang = 'ru' } = Astro.props;
+const total = articles.length;
 ---
 
-<ul class="list">
-  {articles.map((a) => (
+<ol class="articles">
+  {articles.map((a, i) => (
     <li>
-      <a class="list-title" href={`/blog/${a.id}/`}>{a.data.title}</a>
-      {a.data.draft && <span class="tag">draft</span>}
-      <div class="meta"><time datetime={a.data.date.toISOString()}>{formatDate(a.data.date, lang)}</time></div>
-      <p class="desc">{a.data.description}</p>
+      <span class="n">{String(total - i).padStart(2, '0')}</span>
+      <div>
+        <p class="meta mono">
+          <time datetime={a.data.date.toISOString()}>{formatDate(a.data.date, lang)}</time>
+          <span>· {readingMinutes(a.body)} {lang === 'ru' ? 'мин' : 'min'}</span>
+          {a.data.draft && <span class="tag accent">draft</span>}
+        </p>
+        <a class="title" href={`/blog/${a.id}/`}>{a.data.title}</a>
+        <p class="desc">{a.data.description}</p>
+      </div>
     </li>
   ))}
-</ul>
+</ol>
 
 <style>
-  .desc { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.95rem; }
+  .articles { list-style: none; margin: 0; padding: 0; }
+  li {
+    display: grid; grid-template-columns: 4.5rem 1fr; gap: 1rem;
+    padding: 1.5rem 0; border-bottom: 1px solid var(--rule-soft);
+  }
+  li:last-child { border-bottom: 0; }
+  .n { font-family: var(--display); font-style: italic; font-size: 3rem; line-height: 0.9; color: var(--accent); }
+  .meta { margin: 0 0 0.4rem; color: var(--ink-2); display: flex; gap: 0.5rem; align-items: center; }
+  .title {
+    font-family: var(--display); font-weight: 600; font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.05;
+    text-decoration: none; color: var(--ink);
+  }
+  .title:hover { color: var(--accent); }
+  .desc { margin: 0.5rem 0 0; color: var(--ink-2); max-width: 38rem; }
+  @media (max-width: 560px) {
+    li { grid-template-columns: 2.75rem 1fr; }
+    .n { font-size: 2.1rem; }
+  }
 </style>
