@@ -5,6 +5,7 @@ import ShareButton from '../../components/ShareButton.astro';
 import { getArticles, getSeriesNav } from '../../lib/content';
 import { SITE } from '../../data/site';
 import { formatDate } from '../../i18n/ui';
+import { breadcrumbsLd, graph } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const articles = await getArticles();
@@ -25,10 +26,35 @@ const { Content } = await render(article);
 const { title, description, date, updated, tags, cover, lang } = article.data;
 const ogImage = cover ?? `/og/${article.id}.png`;
 const url = new URL(Astro.url.pathname, Astro.site).toString();
+const jsonLd = graph(
+  {
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    url,
+    mainEntityOfPage: url,
+    inLanguage: lang,
+    datePublished: date.toISOString(),
+    dateModified: (updated ?? date).toISOString(),
+    image: new URL(ogImage, Astro.site).toString(),
+    keywords: tags.join(', ') || undefined,
+    author: { '@type': 'Person', '@id': `${SITE.url}/#person`, name: SITE.author[lang], url: `${SITE.url}/` },
+    isPartOf: nav
+      ? { '@type': 'CreativeWorkSeries', name: nav.series.data.title, url: new URL(`/series/${nav.series.id}/`, Astro.site).toString() }
+      : undefined,
+    position: nav ? article.data.part : undefined,
+  },
+  breadcrumbsLd([
+    { name: 'Главная', path: '/' },
+    { name: 'Статьи', path: '/blog/' },
+    ...(nav ? [{ name: nav.series.data.title, path: `/series/${nav.series.id}/` }] : []),
+    { name: title, path: Astro.url.pathname },
+  ]),
+);
 ---
 
 <Base title={title} description={description} lang={lang} type="article" ogImage={ogImage}
-  publishedTime={date} modifiedTime={updated} tags={tags}>
+  publishedTime={date} modifiedTime={updated} tags={tags} jsonLd={jsonLd}>
   <!-- Разметка рассчитана на шаблон Instant View: article h1, .author, time, .article-body -->
   <article class="narrow">
     <header class="head">

@@ -6,14 +6,21 @@ import { getTalks } from '../lib/content';
 import { SITE } from '../data/site';
 import { headline, location, about, beyondWork, education, skills, jobs } from '../data/cv';
 import { t, type Lang } from '../i18n/ui';
+import { personLd, graph } from '../lib/seo';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const tr = t(lang);
 const talks = await getTalks();
+const jsonLd = graph({
+  '@type': 'ProfilePage',
+  url: new URL(Astro.url.pathname, Astro.site).toString(),
+  inLanguage: lang,
+  mainEntity: await personLd(lang),
+});
 ---
 
-<Base title={`${tr('cv.title')} · ${SITE.author[lang]}`} description={headline[lang]} lang={lang} type="profile">
+<Base title={`${tr('cv.title')} · ${SITE.author[lang]}`} description={headline[lang]} lang={lang} type="profile" jsonLd={jsonLd}>
   <div class="wide">
     <section class="top">
       <div class="photo"><Portrait lang={lang} eager /></div>

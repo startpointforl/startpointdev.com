@@ -9,7 +9,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE } from '../data/site';
-import type { Lang } from '../i18n/ui';
+import { altPaths, type Lang } from '../i18n/ui';
 
 interface Props {
   title: string;
@@ -21,6 +21,9 @@ interface Props {
   publishedTime?: Date;
   modifiedTime?: Date;
   tags?: string[];
+  /** Структурированные данные schema.org (см. src/lib/seo.ts) */
+  jsonLd?: object;
+  noindex?: boolean;
 }
 
 const {
@@ -32,12 +35,23 @@ const {
   publishedTime,
   modifiedTime,
   tags = [],
+  jsonLd,
+  noindex = false,
 } = Astro.props;
 
 const author = SITE.author[lang];
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const image = new URL(ogImage, Astro.site);
 const fullTitle = title === author ? title : `${title} — ${author}`;
+// Языковые версии одной страницы: у главной, CV и докладов есть пара на другом языке
+const altPath = altPaths[Astro.url.pathname];
+const hreflang = altPath
+  ? [
+      { lang, href: canonical.toString() },
+      { lang: lang === 'ru' ? 'en' : 'ru', href: new URL(altPath, Astro.site).toString() },
+      { lang: 'x-default', href: new URL(lang === 'ru' ? Astro.url.pathname : altPath, Astro.site).toString() },
+    ]
+  : [];
 ---
 
 <!doctype html>
@@ -49,6 +63,8 @@ const fullTitle = title === author ? title : `${title} — ${author}`;
     <meta name="description" content={description} />
     <meta name="author" content={author} />
     <link rel="canonical" href={canonical} />
+    {hreflang.map((h) => <link rel="alternate" hreflang={h.lang} href={h.href} />)}
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.author.ru} — статьи`} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -85,6 +101,7 @@ const fullTitle = title === author ? title : `${title} — ${author}`;
         if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
       })();
     </script>
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <slot name="head" />
   </head>
   <body>

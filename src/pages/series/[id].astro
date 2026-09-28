@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import ArticleList from '../../components/ArticleList.astro';
 import { getArticles, getParts } from '../../lib/content';
 import { partsLabel } from '../../i18n/ui';
+import { breadcrumbsLd, graph } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const articles = await getArticles();
@@ -15,9 +16,29 @@ export async function getStaticPaths() {
 
 interface Props { series: CollectionEntry<'series'>; parts: CollectionEntry<'articles'>[] }
 const { series, parts } = Astro.props;
+const jsonLd = graph(
+  {
+    '@type': 'CreativeWorkSeries',
+    name: series.data.title,
+    description: series.data.description,
+    url: new URL(Astro.url.pathname, Astro.site).toString(),
+    inLanguage: 'ru',
+    hasPart: parts.map((p) => ({
+      '@type': 'BlogPosting',
+      headline: p.data.title,
+      url: new URL(`/blog/${p.id}/`, Astro.site).toString(),
+      position: p.data.part,
+    })),
+  },
+  breadcrumbsLd([
+    { name: 'Главная', path: '/' },
+    { name: 'Статьи', path: '/blog/' },
+    { name: series.data.title, path: Astro.url.pathname },
+  ]),
+);
 ---
 
-<Base title={series.data.title} description={series.data.description}>
+<Base title={series.data.title} description={series.data.description} jsonLd={jsonLd}>
   <div class="narrow">
     <header class="page-head">
       <p class="kicker mono">цикл статей · {partsLabel(parts.length)}</p>

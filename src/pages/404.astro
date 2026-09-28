@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Страница не найдена" noindex>
+  <div class="narrow">
+    <header class="page-head">
+      <p class="code mono">404</p>
+      <h1>Такой страницы нет</h1>
+      <p>Возможно, ссылка устарела или в адресе опечатка.</p>
+    </header>
+    <p class="links mono">
+      <a href="/">← на главную</a>
+      <a href="/blog/">статьи</a>
+      <a href="/talks/">доклады</a>
+    </p>
+  </div>
+</Base>
+
+<style>
+  .code { color: var(--accent); margin: 0 0 0.5rem; }
+  .links { display: flex; gap: 1.5rem; margin-top: 1.5rem; color: var(--accent); }
+</style>

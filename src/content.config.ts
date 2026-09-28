@@ -16,7 +16,8 @@ const articles = defineCollection({
   loader: glob({
     pattern: '**/*.md',
     base: './src/content/articles',
-    generateId: ({ entry, data }) => (data.slug as string | undefined) ?? entry.replace(/\.md$/, ''),
+    // Статья — либо файл name.md, либо папка name/index.md с картинками рядом
+    generateId: ({ entry, data }) => (data.slug as string | undefined) ?? entry.replace(/(\/index)?\.md$/, ''),
   }),
   schema: z.object({
     title: z.string(),

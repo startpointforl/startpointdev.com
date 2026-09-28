@@ -8,6 +8,7 @@ import { getArticles, getTalks, getSeriesList, getStandalone } from '../lib/cont
 import { SITE } from '../data/site';
 import { headline } from '../data/cv';
 import { t, type Lang } from '../i18n/ui';
+import { personLd, graph } from '../lib/seo';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -18,13 +19,26 @@ const series = (await getSeriesList(articles)).slice(0, 6);
 const standalone = getStandalone(articles).slice(0, 5);
 const talks = (await getTalks()).slice(0, 3);
 
+const jsonLd = graph(
+  {
+    '@type': 'WebSite',
+    '@id': `${SITE.url}/#website`,
+    url: `${SITE.url}/`,
+    name: SITE.author[lang],
+    description: SITE.description[lang],
+    inLanguage: lang,
+    author: { '@id': `${SITE.url}/#person` },
+  },
+  await personLd(lang),
+);
+
 const intro = {
   ru: 'Разбираюсь, как устроены Node.js, V8 и браузеры изнутри, пишу об этом статьи и рассказываю на конференциях. Веду телеграм-канал',
   en: 'I dig into how Node.js, V8 and browsers work under the hood, write about it and talk about it at conferences. I run the Telegram channel',
 }[lang];
 ---
 
-<Base title={SITE.author[lang]} lang={lang}>
+<Base title={SITE.author[lang]} lang={lang} jsonLd={jsonLd}>
   <div class="wide">
     <section class="hero">
       <div>
