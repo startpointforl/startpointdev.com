@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, type Lang } from '../i18n/ui';
+
+interface Props { articles: CollectionEntry<'articles'>[]; lang?: Lang }
+const { articles, lang = 'ru' } = Astro.props;
+---
+
+<ul class="list">
+  {articles.map((a) => (
+    <li>
+      <a class="list-title" href={`/blog/${a.id}/`}>{a.data.title}</a>
+      {a.data.draft && <span class="tag">draft</span>}
+      <div class="meta"><time datetime={a.data.date.toISOString()}>{formatDate(a.data.date, lang)}</time></div>
+      <p class="desc">{a.data.description}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .desc { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.95rem; }
+</style>

@@ -1,0 +1,50 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ShareButton from '../../components/ShareButton.astro';
+import { getArticles } from '../../lib/content';
+import { SITE } from '../../data/site';
+import { formatDate } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+interface Props { article: CollectionEntry<'articles'> }
+const { article } = Astro.props;
+const { Content } = await render(article);
+const { title, description, date, updated, tags, cover, lang } = article.data;
+const ogImage = cover ?? `/og/${article.id}.png`;
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<Base title={title} description={description} lang={lang} type="article" ogImage={ogImage}
+  publishedTime={date} modifiedTime={updated} tags={tags}>
+  <!-- Разметка рассчитана на шаблон Instant View: article > h1, .author, time, .article-body -->
+  <article class="article">
+    <header>
+      <h1>{title}</h1>
+      <p class="meta">
+        <span class="author">{SITE.author[lang]}</span>
+        <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+      </p>
+    </header>
+    <div class="article-body prose">
+      <Content />
+    </div>
+    <footer class="article-footer">
+      {tags.length > 0 && <div class="tags">{tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
+      <ShareButton url={url} />
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .article header { margin-bottom: 2rem; }
+  .article h1 { font-size: 2.3rem; }
+  .meta { display: flex; gap: 0.75rem; }
+  .article-footer { margin-top: 3rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+  .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  @media (max-width: 600px) { .article h1 { font-size: 1.8rem; } }
+</style>

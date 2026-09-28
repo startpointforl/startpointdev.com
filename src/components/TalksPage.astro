@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import TalkList from './TalkList.astro';
+import { getTalks } from '../lib/content';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const tr = t(lang);
+const talks = await getTalks();
+---
+
+<Base title={tr('talks.title')} lang={lang}>
+  <h1>{tr('talks.title')}</h1>
+  <TalkList talks={talks} lang={lang} />
+</Base>

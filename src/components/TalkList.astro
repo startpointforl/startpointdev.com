@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { t, formatDate, type Lang } from '../i18n/ui';
+
+interface Props { talks: CollectionEntry<'talks'>[]; lang: Lang }
+const { talks, lang } = Astro.props;
+const tr = t(lang);
+const now = Date.now();
+---
+
+<ul class="list">
+  {talks.map(({ data: talk }) => {
+    const title = lang === 'en' && talk.titleEn ? talk.titleEn : talk.title;
+    const note = lang === 'en' ? talk.noteEn : talk.note;
+    const upcoming = talk.date.valueOf() > now;
+    const date = talk.dateLabel ?? formatDate(talk.date, lang, { month: 'long', year: 'numeric' });
+    const format = talk.format === 'online' ? tr('talks.online') : talk.format === 'hybrid' ? tr('talks.hybrid') : talk.city;
+    return (
+      <li>
+        <div class="meta">
+          <strong class="event">{talk.event}</strong> · {date}{format && ` · ${format}`}
+          {upcoming && <span class="tag">{tr('talks.upcoming')}</span>}
+        </div>
+        <div class="list-title">{title}</div>
+        {lang === 'en' && talk.lang === 'ru' && <div class="meta">Talk in Russian</div>}
+        {note && <div class="meta">{note}</div>}
+        {(talk.video || talk.slides || talk.page) && (
+          <div class="links">
+            {talk.video && <a href={talk.video}>▶ {tr('talks.video')}</a>}
+            {talk.slides && <a href={talk.slides}>{tr('talks.slides')}</a>}
+            {talk.page && <a href={talk.page}>{tr('talks.page')}</a>}
+          </div>
+        )}
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  .event { color: var(--text); font-weight: 600; }
+  .list-title { margin-top: 0.2rem; }
+  .tag { margin-left: 0.5rem; }
+  .links { display: flex; gap: 1rem; margin-top: 0.4rem; font-size: 0.9rem; }
+</style>

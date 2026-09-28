@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import TalkList from './TalkList.astro';
+import { getTalks } from '../lib/content';
+import { SITE } from '../data/site';
+import { headline, about, skills, jobs } from '../data/cv';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const tr = t(lang);
+const talks = await getTalks();
+---
+
+<Base title={`${tr('cv.title')} · ${SITE.author[lang]}`} description={headline[lang]} lang={lang} type="profile">
+  <h1>{SITE.author[lang]}</h1>
+  <p class="headline">{headline[lang]}</p>
+  <p class="contacts small">
+    <a href={`mailto:${SITE.links.email}`}>{SITE.links.email}</a>
+    <a href={SITE.links.telegram}>Telegram</a>
+    <a href={SITE.links.linkedin}>LinkedIn</a>
+  </p>
+
+  <h2>{tr('cv.about')}</h2>
+  {about[lang].map((p) => <p>{p}</p>)}
+
+  <h2>{tr('cv.skills')}</h2>
+  <p class="skills">{skills.map((s) => <span class="tag">{s}</span>)}</p>
+
+  <h2>{tr('cv.experience')}</h2>
+  <ol class="jobs">
+    {jobs.map((job) => (
+      <li>
+        <div class="job-head">
+          <strong>{job.role[lang]}</strong>
+          <span class="meta">{job.period[lang]}</span>
+        </div>
+        <div class="meta">{job.company[lang]} · {job.project[lang]}</div>
+        {job.points[lang].length > 0 && (
+          <ul>{job.points[lang].map((p) => <li>{p}</li>)}</ul>
+        )}
+      </li>
+    ))}
+  </ol>
+
+  <h2>{tr('cv.talks')}</h2>
+  <TalkList talks={talks} lang={lang} />
+</Base>
+
+<style>
+  .headline { font-size: 1.15rem; color: var(--muted); margin: 0; }
+  .contacts { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+  .skills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .skills .tag { font-size: 0.85rem; padding: 0.2rem 0.65rem; }
+  .jobs { list-style: none; padding: 0; margin: 0; }
+  .jobs > li { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .jobs > li:last-child { border-bottom: 0; }
+  .job-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .jobs ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+  .jobs ul li { margin: 0.25rem 0; font-size: 0.95rem; }
+  @media print {
+    :global(header), :global(footer) { display: none; }
+  }
+</style>

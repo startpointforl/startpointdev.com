@@ -1,0 +1,67 @@
+# Выступления. Новые — просто добавляй элемент в список (порядок не важен, сортируется по дате).
+# id — любой уникальный идентификатор латиницей.
+
+- id: holyjs-2026
+  title: "Добро пожаловать на сервер: где в Next.js App Router прячутся уязвимости"
+  titleEn: "Welcome to the server: where vulnerabilities hide in Next.js App Router"
+  event: HolyJS 2026 Autumn
+  date: 2026-10-23
+  city: Санкт-Петербург
+  format: hybrid
+  page: https://holyjs.ru/talks/20011224-welcome-to-the-server-where-vulnerabilities-hide-in-next-js-app-router/
+
+- id: podlodka-react-crew-4
+  title: "Работа с данными в React: взгляд изнутри V8"
+  titleEn: "Working with data in React: a view from inside V8"
+  event: Podlodka React Crew #4
+  date: 2026-03-18
+  format: online
+  video: https://www.youtube.com/live/3LM9AekBuaw
+  note: Открытая сессия
+  noteEn: Open session
+
+- id: dump-spb-2026
+  title: "Ignition, Sparkplug, Maglev, TurboFan: как компилирует V8"
+  titleEn: "Ignition, Sparkplug, Maglev, TurboFan: how V8 compiles"
+  event: DUMP Санкт-Петербург
+  date: 2026-02-13
+  city: Санкт-Петербург
+  format: offline
+  video: https://youtu.be/jY7Af6zR40A
+
+- id: frontendconf-2025
+  title: "Node.js на стероидах: как и зачем писать нативные модули"
+  titleEn: "Node.js on steroids: how and why to write native addons"
+  event: FrontendConf 2025
+  date: 2025-10-21
+  city: Москва
+  format: offline
+  video: https://youtu.be/ZaoRJs5HD8k
+  note: 4 место в рейтинге докладов конференции
+  noteEn: "#4 in the conference talk rating"
+
+- id: ya-subbotnik-2025
+  title: "Не переписывай — обнови! Как вдохнуть жизнь в легаси"
+  titleEn: "Don't rewrite — upgrade! Breathing new life into legacy"
+  event: Яндекс Субботник
+  date: 2025-07-26
+  city: Минск
+  format: offline
+  video: https://youtu.be/a1qoD9jdJa0
+
+- id: minskjs-2025
+  title: "gyp ERR! Почему падает npm install?"
+  titleEn: "gyp ERR! Why does npm install fail?"
+  event: MinskJS
+  date: 2025-03-19
+  format: online
+  video: https://youtu.be/fYRw6QFXkqw
+
+- id: podlodka-frontend-crew-3
+  title: "Streams в Node.js: работа с данными в потоке"
+  titleEn: "Streams in Node.js: processing data on the fly"
+  event: Podlodka Frontend Crew #3
+  date: 2021-01-01
+  dateLabel: "2021"
+  format: online
+  video: https://www.youtube.com/watch?v=RLmkDf0afYk

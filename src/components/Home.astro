@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import ArticleList from './ArticleList.astro';
+import TalkList from './TalkList.astro';
+import { getArticles, getTalks } from '../lib/content';
+import { SITE } from '../data/site';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const tr = t(lang);
+const prefix = lang === 'en' ? '/en' : '';
+const articles = (await getArticles()).slice(0, 5);
+const talks = (await getTalks()).slice(0, 3);
+
+const intro = {
+  ru: 'Senior frontend-разработчица в Яндекс Пэй. Пишу про то, как устроены Node.js, V8 и браузеры, и выступаю с этим на конференциях. Веду телеграм-канал',
+  en: 'Senior frontend developer at Yandex Pay. I write about how Node.js, V8 and browsers work under the hood, and talk about it at conferences. I run the Telegram channel',
+};
+---
+
+<Base title={SITE.author[lang]} lang={lang}>
+  <section class="hero">
+    <h1>{SITE.author[lang]}</h1>
+    <p>{intro[lang]} <a href={SITE.links.telegram}>{SITE.telegramChannel}</a>.</p>
+  </section>
+
+  <h2>{tr('blog.recent')}</h2>
+  <ArticleList articles={articles} lang={lang} />
+  <p><a href="/blog/">{tr('blog.all')} →</a></p>
+
+  <h2>{tr('talks.recent')}</h2>
+  <TalkList talks={talks} lang={lang} />
+  <p><a href={`${prefix}/talks/`}>{tr('talks.all')} →</a></p>
+</Base>
+
+<style>
+  .hero p { font-size: 1.1rem; color: var(--muted); max-width: 36rem; }
+</style>

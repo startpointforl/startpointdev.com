@@ -1,0 +1,26 @@
+---
+import { SITE } from '../data/site';
+import type { Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+
+<footer class="container footer">
+  <a href={SITE.links.telegram}>Telegram</a>
+  <a href={SITE.links.linkedin}>LinkedIn</a>
+  <a href={`mailto:${SITE.links.email}`}>Email</a>
+  <a href="/rss.xml">RSS</a>
+  <span class="muted">© {new Date().getFullYear()} {SITE.author[lang]}</span>
+</footer>
+
+<style>
+  .footer {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem;
+    margin-top: 4rem; padding-top: 1.5rem; padding-bottom: 2.5rem;
+    border-top: 1px solid var(--border); font-size: 0.875rem;
+  }
+  .footer a { color: var(--muted); }
+  .footer a:hover { color: var(--text); }
+  .footer span { margin-left: auto; }
+</style>
