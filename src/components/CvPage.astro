@@ -1,19 +1,16 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import TalkList from './TalkList.astro';
 import Portrait from './Portrait.astro';
 import { getTalks } from '../lib/content';
 import { SITE } from '../data/site';
 import { headline, location, about, beyondWork, education, skills, jobs } from '../data/cv';
-import aboutPhoto from '../assets/about-skye.jpg';
 import { t, type Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const tr = t(lang);
 const talks = await getTalks();
-const skyeAlt = { ru: 'Анастасия держит на руках кота Ская', en: 'Anastasia holding her cat Skye' }[lang];
 ---
 
 <Base title={`${tr('cv.title')} · ${SITE.author[lang]}`} description={headline[lang]} lang={lang} type="profile">
@@ -40,7 +37,6 @@ const skyeAlt = { ru: 'Анастасия держит на руках кота 
         <p class="muted-label mono">{tr('cv.beyond').toLowerCase()}:</p>
         <ul>{beyondWork[lang].map((p) => <li>{p}</li>)}</ul>
       </div>
-      <Image src={aboutPhoto} alt={skyeAlt} widths={[320, 640]} sizes="(max-width: 760px) 100vw, 18rem" class="about-photo" />
     </div>
 
     <div class="section-head"><span>{tr('cv.experience').toLowerCase()}</span></div>
@@ -81,13 +77,12 @@ const skyeAlt = { ru: 'Анастасия держит на руках кота 
   .role { color: var(--accent); margin: 0.5rem 0 0; }
   .loc { color: var(--muted); font-size: 14px; margin: 0.35rem 0 0; }
   .contacts { display: flex; flex-wrap: wrap; gap: 0.3rem 1.25rem; margin: 0.9rem 0 0; font-size: 14px; color: var(--muted); }
-  .about { display: grid; grid-template-columns: 1fr 18rem; gap: 2.5rem; align-items: start; }
+  .about { max-width: 42rem; }
   .about-text p { margin: 0 0 0.9rem; }
   .about-text ul { margin: 0; padding-left: 1.1rem; }
   .about-text li { margin: 0.2rem 0; }
   .about-text li::marker, .jobs ul li::marker { color: var(--accent); }
   .muted-label { color: var(--muted); font-size: 14px; margin-top: 1.25rem !important; }
-  .about-photo { width: 100%; height: auto; border-radius: 6px; display: block; }
   .jobs { list-style: none; padding: 0; margin: 0; }
   .jobs > li { display: grid; grid-template-columns: 11rem 1fr; gap: 1.25rem; padding: 0.9rem 0; }
   .d { font: 400 14px var(--mono); color: var(--muted); padding-top: 0.15rem; }
@@ -100,10 +95,6 @@ const skyeAlt = { ru: 'Анастасия держит на руках кота 
   .skills dt { color: var(--muted); font-size: 14px; padding-top: 0.1rem; }
   .skills dd { margin: 0; }
   .edu { margin: 0; }
-  @media (max-width: 760px) {
-    .about { grid-template-columns: 1fr; }
-    .about-photo { max-width: 22rem; }
-  }
   @media (max-width: 640px) {
     .top { grid-template-columns: 1fr; gap: 1.25rem; }
     .photo { max-width: 8rem; }
