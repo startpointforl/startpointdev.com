@@ -2,7 +2,7 @@ import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// Цикл статей: src/content/series/<id>.md. Тело файла — вступление на странице цикла.
+// Цикл статей: src/content/series/<id>.md, только frontmatter.
 const series = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/series' }),
   schema: z.object({

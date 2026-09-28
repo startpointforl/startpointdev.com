@@ -1,5 +1,5 @@
 ---
-import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ArticleList from '../../components/ArticleList.astro';
 import { getArticles, getParts } from '../../lib/content';
@@ -15,7 +15,6 @@ export async function getStaticPaths() {
 
 interface Props { series: CollectionEntry<'series'>; parts: CollectionEntry<'articles'>[] }
 const { series, parts } = Astro.props;
-const { Content } = await render(series);
 ---
 
 <Base title={series.data.title} description={series.data.description}>
@@ -25,7 +24,6 @@ const { Content } = await render(series);
       <h1>{series.data.title}</h1>
       <p>{series.data.description}</p>
     </header>
-    {series.body?.trim() && <div class="prose intro"><Content /></div>}
     <div class="section-head"><span>оглавление</span></div>
     <ArticleList articles={parts} numbered />
     <p class="start"><a class="btn" href={`/blog/${parts[0].id}/`}>начать с первой части →</a></p>
@@ -35,6 +33,5 @@ const { Content } = await render(series);
 <style>
   .kicker { color: var(--accent); font-size: 14px; margin: 0 0 0.6rem; }
   .page-head p.kicker { margin-top: 0; }
-  .intro { margin-top: 2rem; }
   .start { margin-top: 2rem; }
 </style>
