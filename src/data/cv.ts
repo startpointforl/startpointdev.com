@@ -38,7 +38,7 @@ export const skills = [
 export const jobs: Job[] = [
   {
     // TODO: уточнить дату перехода в Яндекс Пэй и описание задач
-    role: { ru: 'Старший frontend-разработчик', en: 'Senior Frontend Developer' },
+    role: { ru: 'Старшая frontend-разработчица', en: 'Senior Frontend Developer' },
     company: { ru: 'Яндекс', en: 'Yandex' },
     project: { ru: 'Яндекс Пэй', en: 'Yandex Pay' },
     period: { ru: '2025 — сейчас', en: '2025 — present' },
