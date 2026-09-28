@@ -2,8 +2,8 @@
 import type { CollectionEntry } from 'astro:content';
 import { t, formatIso, type Lang } from '../i18n/ui';
 
-interface Props { talks: CollectionEntry<'talks'>[]; lang: Lang }
-const { talks, lang } = Astro.props;
+interface Props { talks: CollectionEntry<'talks'>[]; lang: Lang; abstracts?: boolean }
+const { talks, lang, abstracts = false } = Astro.props;
 const tr = t(lang);
 const now = Date.now();
 ---
@@ -24,6 +24,7 @@ const now = Date.now();
           <div class="t">{title}</div>
           {lang === 'en' && talk.lang === 'ru' && <div class="n">Talk in Russian</div>}
           {note && <div class="n">{note}</div>}
+          {abstracts && talk.abstract && lang === 'ru' && <p class="a">{talk.abstract}</p>}
           {(talk.video || talk.slides || talk.page) && (
             <div class="l">
               {talk.video && <a href={talk.video}>▶ {tr('talks.video')}</a>}
@@ -44,6 +45,7 @@ const now = Date.now();
   .e { font: 400 13px var(--mono); color: var(--muted); display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
   .t { font: 400 1.1rem/1.4 var(--mono); margin-top: 0.15rem; }
   .n { color: var(--muted); font-size: 15px; margin-top: 0.2rem; }
+  .a { margin: 0.4rem 0 0; color: var(--muted); font-size: 15px; line-height: 1.55; max-width: 40rem; }
   .l { display: flex; gap: 1.1rem; font: 400 13px var(--mono); color: var(--accent); margin-top: 0.35rem; }
   @media (max-width: 560px) { li { grid-template-columns: 1fr; gap: 0.1rem; } }
 </style>

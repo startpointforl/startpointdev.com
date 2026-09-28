@@ -56,12 +56,22 @@
   date: 2025-03-19
   format: online
   video: https://youtu.be/fYRw6QFXkqw
+  note: Митап MinskJS №12
+  abstract: >-
+    Вы когда-нибудь видели в терминале gyp ERR! после npm install? Если да, то наверняка
+    думали «Что за чертовщина?», «Почему опять?» и «Я просто хотел установить пакет!».
+    Расскажу, что такое node-gyp, зачем он нужен и почему установка пакетов в Node.js иногда
+    превращается в ад. Научимся разбираться в этих ошибках и чинить их, чтобы раз и навсегда
+    перестать бояться gyp ERR!.
 
 - id: podlodka-frontend-crew-3
   title: "Streams в Node.js: работа с данными в потоке"
   titleEn: "Streams in Node.js: processing data on the fly"
   event: Podlodka Frontend Crew #3
-  date: 2021-01-01
-  dateLabel: "2021"
+  date: 2021-12-01
+  dateLabel: "2021-12"
   format: online
   video: https://www.youtube.com/watch?v=RLmkDf0afYk
+  abstract: >-
+    Сталкивались ли вы с потоками в Node.js? А как часто обращали на них внимание? Залезем
+    в самую их суть, посмотрим, как они работают и что умеют, а главное — узнаем, зачем всё это нужно.

@@ -24,7 +24,7 @@ const lead = {
     {years.map((year) => (
       <section>
         <div class="section-head"><span>{year}</span></div>
-        <TalkList talks={talks.filter((x) => x.data.date.getUTCFullYear() === year)} lang={lang} />
+        <TalkList talks={talks.filter((x) => x.data.date.getUTCFullYear() === year)} lang={lang} abstracts />
       </section>
     ))}
   </div>

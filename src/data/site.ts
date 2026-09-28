@@ -8,6 +8,8 @@ export const SITE = {
   telegramChannel: '@startpoint_dev',
   links: {
     telegram: 'https://t.me/startpoint_dev',
+    telegramPersonal: 'https://t.me/startpoint_forl',
+    github: 'https://github.com/startpointforl',
     linkedin: 'https://www.linkedin.com/in/startpointforl/',
     email: 'startpoint.dev.kotova@gmail.com',
   },

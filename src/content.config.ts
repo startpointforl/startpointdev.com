@@ -50,6 +50,8 @@ const talks = defineCollection({
     video: z.string().url().optional(),
     slides: z.string().url().optional(),
     page: z.string().url().optional(),
+    // Описание доклада (аннотация) — показывается на странице «Доклады»
+    abstract: z.string().optional(),
     note: z.string().optional(),
     noteEn: z.string().optional(),
   }),
