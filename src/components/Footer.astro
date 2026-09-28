@@ -4,25 +4,22 @@ import type { Lang } from '../i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const colophon = {
-  ru: 'Набрано шрифтами Cormorant Garamond, Literata и IBM Plex Mono. Сверстано на Astro.',
-  en: 'Set in Cormorant Garamond, Literata and IBM Plex Mono. Built with Astro.',
-};
 ---
 
-<footer class="footer wide">
-  <div class="links mono">
-    <a href={SITE.links.telegram}>Telegram</a>
-    <a href={SITE.links.linkedin}>LinkedIn</a>
-    <a href={`mailto:${SITE.links.email}`}>Email</a>
-    <a href="/rss.xml">RSS</a>
-  </div>
-  <p class="colophon">{colophon[lang]} © {new Date().getFullYear()} {SITE.author[lang]}</p>
-</footer>
+<footer class="wide"><div class="footer">
+  <span>© {new Date().getFullYear()} {SITE.author[lang]}</span>
+  <nav>
+    <a href={SITE.links.telegram}>telegram</a>
+    <a href={SITE.links.linkedin}>linkedin</a>
+    <a href={`mailto:${SITE.links.email}`}>email</a>
+    <a href="/rss.xml">rss</a>
+  </nav>
+</div></footer>
 
 <style>
-  .footer { margin-top: 6rem; padding-bottom: 3rem; }
-  .links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding-top: 0.9rem; border-top: 3px double var(--ink); }
-  .links a { text-decoration: none; }
-  .colophon { font-style: italic; font-size: 0.9rem; color: var(--ink-2); margin: 1rem 0 0; max-width: 34rem; }
+  .footer {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem 1.5rem;
+    margin: 5rem 0 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font: 400 14px var(--mono); color: var(--muted);
+  }
+  nav { display: flex; gap: 1.25rem; }
 </style>

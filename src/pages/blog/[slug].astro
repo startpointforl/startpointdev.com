@@ -2,63 +2,102 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ShareButton from '../../components/ShareButton.astro';
-import { getArticles } from '../../lib/content';
-import { readingMinutes } from '../../lib/reading';
+import { getArticles, getSeriesNav } from '../../lib/content';
 import { SITE } from '../../data/site';
 import { formatDate } from '../../i18n/ui';
 
 export async function getStaticPaths() {
   const articles = await getArticles();
-  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+  return Promise.all(
+    articles.map(async (article) => ({
+      params: { slug: article.id },
+      props: { article, nav: await getSeriesNav(article, articles) },
+    })),
+  );
 }
 
-interface Props { article: CollectionEntry<'articles'> }
-const { article } = Astro.props;
+interface Props {
+  article: CollectionEntry<'articles'>;
+  nav: Awaited<ReturnType<typeof getSeriesNav>>;
+}
+const { article, nav } = Astro.props;
 const { Content } = await render(article);
 const { title, description, date, updated, tags, cover, lang } = article.data;
 const ogImage = cover ?? `/og/${article.id}.png`;
 const url = new URL(Astro.url.pathname, Astro.site).toString();
-const minutes = readingMinutes(article.body);
 ---
 
 <Base title={title} description={description} lang={lang} type="article" ogImage={ogImage}
   publishedTime={date} modifiedTime={updated} tags={tags}>
   <!-- Разметка рассчитана на шаблон Instant View: article h1, .author, time, .article-body -->
-  <article class="article">
-    <header class="head narrow">
-      <p class="mono kicker">{tags[0] ?? 'Статья'}</p>
-      <h1 class="display">{title}</h1>
-      <p class="lead">{description}</p>
-      <p class="byline mono">
-        <span>Текст: <span class="author">{SITE.author[lang]}</span></span>
-        <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
-        <span>{minutes} мин чтения</span>
+  <article class="narrow">
+    <header class="head">
+      {nav && (
+        <p class="kicker">
+          <a href={`/series/${nav.series.id}/`}>{nav.series.data.title}</a> · часть {article.data.part} из {nav.parts.length}
+        </p>
+      )}
+      <h1>{title}</h1>
+      <p class="meta">
+        <span class="author">{SITE.author[lang]}</span> · <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+        {tags.length > 0 && <span class="tags"> · {tags.map((tag) => `#${tag}`).join(' ')}</span>}
       </p>
+      {nav && nav.parts.length > 1 && (
+        <details class="toc">
+          <summary>оглавление цикла</summary>
+          <ol>
+            {nav.parts.map((p) => (
+              <li aria-current={p.id === article.id ? 'page' : undefined}>
+                <span>{p.data.part}.</span>
+                {p.id === article.id ? <span>{p.data.title}</span> : <a href={`/blog/${p.id}/`}>{p.data.title}</a>}
+              </li>
+            ))}
+          </ol>
+        </details>
+      )}
     </header>
-    <div class="article-body prose dropcap narrow">
+
+    <div class="article-body prose">
       <Content />
     </div>
-    <footer class="narrow">
-      <div class="article-footer">
-        {tags.length > 0 && <div class="tags">{tags.map((tag) => <span class="tag">{tag}</span>)}</div>}
-        <ShareButton url={url} />
-      </div>
+
+    <footer class="foot">
+      {nav && (nav.prev || nav.next) && (
+        <nav class="pager" aria-label="Навигация по циклу">
+          {nav.prev ? (
+            <a href={`/blog/${nav.prev.id}/`} class="prev"><span>← часть {nav.prev.data.part}</span>{nav.prev.data.title}</a>
+          ) : <span />}
+          {nav.next ? (
+            <a href={`/blog/${nav.next.id}/`} class="next"><span>часть {nav.next.data.part} →</span>{nav.next.data.title}</a>
+          ) : <span />}
+        </nav>
+      )}
+      <div class="share"><ShareButton url={url} /></div>
     </footer>
   </article>
 </Base>
 
 <style>
-  .head { padding-top: 3.5rem; margin-bottom: 2.5rem; }
-  .kicker { color: var(--accent); margin: 0 0 1.25rem; }
-  h1 { font-size: clamp(2.6rem, 6.5vw, 4.4rem); }
-  .lead { margin: 1.5rem 0 0; }
-  .byline {
-    display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; margin: 2rem 0 0;
-    padding: 0.7rem 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); color: var(--ink-2);
+  .head { padding: 1.5rem 0 2rem; }
+  .kicker { font: 400 14px var(--mono); color: var(--muted); margin: 0 0 0.8rem; }
+  .kicker a { color: var(--accent); }
+  h1 { font-size: 2.1rem; line-height: 1.25; letter-spacing: -0.01em; }
+  .meta { font: 400 14px var(--mono); color: var(--muted); margin: 1rem 0 0; }
+  .toc { margin-top: 1.5rem; border: 1px solid var(--line); border-radius: 6px; padding: 0.7rem 1rem; font-size: 15px; }
+  .toc summary { font: 400 14px var(--mono); color: var(--muted); cursor: pointer; }
+  .toc ol { list-style: none; padding: 0; margin: 0.6rem 0 0.2rem; }
+  .toc li { display: grid; grid-template-columns: 1.75rem 1fr; padding: 0.2rem 0; }
+  .toc li span:first-child { font-family: var(--mono); color: var(--muted); }
+  .toc li[aria-current='page'] { color: var(--accent); }
+  .foot { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .pager a { display: flex; flex-direction: column; gap: 0.3rem; padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 6px; font: 400 15px/1.4 var(--mono); }
+  .pager a:hover { border-color: var(--accent); }
+  .pager a span { font-size: 13px; color: var(--muted); }
+  .pager .next { text-align: right; }
+  .share { display: flex; justify-content: flex-end; }
+  @media (max-width: 600px) {
+    h1 { font-size: 1.65rem; }
+    .pager { grid-template-columns: 1fr; }
   }
-  .article-footer {
-    margin-top: 4rem; padding-top: 1.25rem; border-top: 3px solid var(--ink);
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
-  }
-  .tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 </style>

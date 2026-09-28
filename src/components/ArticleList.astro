@@ -1,47 +1,40 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDate, type Lang } from '../i18n/ui';
-import { readingMinutes } from '../lib/reading';
+import { formatIso } from '../i18n/ui';
 
-interface Props { articles: CollectionEntry<'articles'>[]; lang?: Lang }
-const { articles, lang = 'ru' } = Astro.props;
-const total = articles.length;
+interface Props {
+  articles: CollectionEntry<'articles'>[];
+  /** Показывать «часть N» вместо даты-колонки (для оглавления цикла) */
+  numbered?: boolean;
+  current?: string;
+}
+const { articles, numbered = false, current } = Astro.props;
 ---
 
-<ol class="articles">
-  {articles.map((a, i) => (
-    <li>
-      <span class="n">{String(total - i).padStart(2, '0')}</span>
+<ol class="posts">
+  {articles.map((a) => (
+    <li aria-current={a.id === current ? 'page' : undefined}>
+      <span class="d">{numbered ? `часть ${a.data.part}` : formatIso(a.data.date)}</span>
       <div>
-        <p class="meta mono">
-          <time datetime={a.data.date.toISOString()}>{formatDate(a.data.date, lang)}</time>
-          <span>· {readingMinutes(a.body)} {lang === 'ru' ? 'мин' : 'min'}</span>
-          {a.data.draft && <span class="tag accent">draft</span>}
-        </p>
-        <a class="title" href={`/blog/${a.id}/`}>{a.data.title}</a>
-        <p class="desc">{a.data.description}</p>
+        <a class="t" href={`/blog/${a.id}/`}>{a.data.title}</a>
+        {a.data.draft && <span class="badge">draft</span>}
+        <div class="g">
+          {numbered ? formatIso(a.data.date) : a.data.tags.map((tag) => `#${tag}`).join(' ')}
+        </div>
       </div>
     </li>
   ))}
 </ol>
 
 <style>
-  .articles { list-style: none; margin: 0; padding: 0; }
-  li {
-    display: grid; grid-template-columns: 4.5rem 1fr; gap: 1rem;
-    padding: 1.5rem 0; border-bottom: 1px solid var(--rule-soft);
-  }
-  li:last-child { border-bottom: 0; }
-  .n { font-family: var(--display); font-style: italic; font-size: 3rem; line-height: 0.9; color: var(--accent); }
-  .meta { margin: 0 0 0.4rem; color: var(--ink-2); display: flex; gap: 0.5rem; align-items: center; }
-  .title {
-    font-family: var(--display); font-weight: 600; font-size: clamp(1.6rem, 3vw, 2.1rem); line-height: 1.05;
-    text-decoration: none; color: var(--ink);
-  }
-  .title:hover { color: var(--accent); }
-  .desc { margin: 0.5rem 0 0; color: var(--ink-2); max-width: 38rem; }
+  .posts { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1.25rem; padding: 0.8rem 0; }
+  .d { font: 400 14px var(--mono); color: var(--muted); padding-top: 0.2rem; }
+  .t { font: 400 1.15rem/1.4 var(--mono); }
+  .badge { margin-left: 0.5rem; }
+  .g { font: 400 13px var(--mono); color: var(--muted); margin-top: 0.2rem; }
+  li[aria-current='page'] .t { color: var(--accent); }
   @media (max-width: 560px) {
-    li { grid-template-columns: 2.75rem 1fr; }
-    .n { font-size: 2.1rem; }
+    li { grid-template-columns: 1fr; gap: 0.1rem; }
   }
 </style>

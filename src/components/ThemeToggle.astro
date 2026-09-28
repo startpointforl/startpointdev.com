@@ -5,11 +5,8 @@ interface Props { label: string }
 <button class="theme-toggle" type="button" aria-label={Astro.props.label} title={Astro.props.label}>◐</button>
 
 <style>
-  .theme-toggle {
-    font: 1rem/1 var(--mono); padding: 0.1rem 0.2rem; border: 0; background: none; color: var(--ink); cursor: pointer;
-    transition: transform 0.3s;
-  }
-  .theme-toggle:hover { color: var(--accent); transform: rotate(180deg); }
+  .theme-toggle { font: 400 15px var(--mono); padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; }
+  .theme-toggle:hover { color: var(--accent); }
 </style>
 
 <script>

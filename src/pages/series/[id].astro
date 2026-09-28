@@ -1,0 +1,40 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { getArticles, getParts } from '../../lib/content';
+import { partsLabel } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  const all = await getCollection('series');
+  return all
+    .map((series) => ({ params: { id: series.id }, props: { series, parts: getParts(articles, series.id) } }))
+    .filter(({ props }) => props.parts.length > 0);
+}
+
+interface Props { series: CollectionEntry<'series'>; parts: CollectionEntry<'articles'>[] }
+const { series, parts } = Astro.props;
+const { Content } = await render(series);
+---
+
+<Base title={series.data.title} description={series.data.description}>
+  <div class="narrow">
+    <header class="page-head">
+      <p class="kicker mono">цикл статей · {partsLabel(parts.length)}</p>
+      <h1>{series.data.title}</h1>
+      <p>{series.data.description}</p>
+    </header>
+    {series.body?.trim() && <div class="prose intro"><Content /></div>}
+    <div class="section-head"><span>оглавление</span></div>
+    <ArticleList articles={parts} numbered />
+    <p class="start"><a class="btn" href={`/blog/${parts[0].id}/`}>начать с первой части →</a></p>
+  </div>
+</Base>
+
+<style>
+  .kicker { color: var(--accent); font-size: 14px; margin: 0 0 0.6rem; }
+  .page-head p.kicker { margin-top: 0; }
+  .intro { margin-top: 2rem; }
+  .start { margin-top: 2rem; }
+</style>

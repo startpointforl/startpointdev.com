@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { partsLabel } from '../i18n/ui';
+
+interface Props {
+  items: { series: CollectionEntry<'series'>; parts: CollectionEntry<'articles'>[]; updated: Date }[];
+}
+---
+
+<div class="cards">
+  {Astro.props.items.map(({ series, parts, updated }) => (
+    <a class="card" href={`/series/${series.id}/`}>
+      <span class="t">{series.data.title}</span>
+      <span class="d">{series.data.description}</span>
+      <span class="m">{partsLabel(parts.length)} · {updated.getUTCFullYear()}</span>
+    </a>
+  ))}
+</div>
+
+<style>
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card { display: flex; flex-direction: column; gap: 0.35rem; padding: 1rem 1.15rem; border: 1px solid var(--line); border-radius: 6px; }
+  .card:hover { border-color: var(--accent); color: inherit; }
+  .t { font: 400 1.1rem/1.35 var(--mono); }
+  .card:hover .t { color: var(--accent); }
+  .d { color: var(--muted); font-size: 15px; line-height: 1.45; }
+  .m { font: 400 12px var(--mono); color: var(--accent); margin-top: auto; padding-top: 0.25rem; }
+  @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
+</style>

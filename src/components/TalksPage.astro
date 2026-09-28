@@ -18,26 +18,14 @@ const lead = {
 <Base title={tr('talks.title')} lang={lang}>
   <div class="wide">
     <header class="page-head">
-      <h1 class="display">{tr('talks.title')}</h1>
-      <p class="lead">{lead}</p>
+      <h1>{tr('talks.title')}</h1>
+      <p>{lead}</p>
     </header>
     {years.map((year) => (
-      <section class="year">
-        <h2 class="display">{year}</h2>
+      <section>
+        <div class="section-head"><span>{year}</span></div>
         <TalkList talks={talks.filter((x) => x.data.date.getUTCFullYear() === year)} lang={lang} />
       </section>
     ))}
   </div>
 </Base>
-
-<style>
-  .page-head { padding: 3.5rem 0 1.5rem; }
-  h1 { font-size: clamp(3rem, 8vw, 6rem); }
-  .lead { margin: 1rem 0 0; max-width: 36rem; }
-  .year { display: grid; grid-template-columns: 10rem 1fr; gap: 1.5rem; border-top: 3px solid var(--ink); padding-top: 0.5rem; margin-top: 2.5rem; }
-  .year h2 { font-size: 4rem; font-style: italic; font-weight: 500; color: var(--accent); line-height: 1; padding-top: 0.75rem; }
-  @media (max-width: 720px) {
-    .year { grid-template-columns: 1fr; gap: 0; }
-    .year h2 { font-size: 3rem; }
-  }
-</style>

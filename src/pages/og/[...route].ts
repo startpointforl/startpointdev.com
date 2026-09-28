@@ -15,13 +15,13 @@ export const { getStaticPaths, GET } = await OGImageRoute({
   getImageOptions: (_path, page) => ({
     title: page.title,
     description: page.description,
-    bgGradient: [[242, 238, 229]],
-    border: { color: [36, 51, 232], width: 24, side: 'block-start' },
+    bgGradient: [[22, 22, 24]],
+    border: { color: [157, 191, 143], width: 12, side: 'inline-start' },
     padding: 80,
     font: {
-      title: { families: ['PT Serif'], weight: 'Bold', size: 68, lineHeight: 1.1, color: [20, 19, 18] },
-      description: { families: ['PT Serif'], weight: 'Normal', size: 32, lineHeight: 1.4, color: [91, 86, 77] },
+      title: { families: ['PT Mono'], weight: 'Normal', size: 60, lineHeight: 1.25, color: [226, 226, 229] },
+      description: { families: ['PT Sans'], weight: 'Normal', size: 32, lineHeight: 1.4, color: [138, 138, 147] },
     },
-    fonts: ['./src/assets/fonts/PTSerif-Bold.ttf', './src/assets/fonts/PTSerif-Italic.ttf'],
+    fonts: ['./src/assets/fonts/PTMono-Regular.ttf', './src/assets/fonts/PTSans-Regular.ttf'],
   }),
 });

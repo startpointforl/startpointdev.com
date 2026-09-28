@@ -1,23 +1,37 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ArticleList from '../../components/ArticleList.astro';
-import { getArticles } from '../../lib/content';
+import { getArticles, getSeriesList, getStandalone } from '../../lib/content';
 
 const articles = await getArticles();
+const series = await getSeriesList(articles);
+const standalone = getStandalone(articles);
 ---
 
 <Base title="Статьи">
   <div class="wide">
     <header class="page-head">
-      <h1 class="display">Статьи</h1>
-      <p class="lead">Разборы того, как устроены Node.js, V8, libuv, Next.js и браузеры.</p>
+      <h1>Статьи</h1>
+      <p>Разборы того, как устроены Node.js, V8, libuv, Next.js и браузеры. Большая часть выходит циклами.</p>
     </header>
-    <ArticleList articles={articles} />
+
+    {series.map(({ series: s, parts }) => (
+      <section class="series">
+        <div class="section-head"><a href={`/series/${s.id}/`} class="name">{s.data.title}</a><a href={`/series/${s.id}/`}>о цикле →</a></div>
+        <ArticleList articles={parts} numbered />
+      </section>
+    ))}
+
+    {standalone.length > 0 && (
+      <section>
+        <div class="section-head"><span>{series.length > 0 ? 'отдельные статьи' : 'все статьи'}</span></div>
+        <ArticleList articles={standalone} />
+      </section>
+    )}
   </div>
 </Base>
 
 <style>
-  .page-head { padding: 3.5rem 0 1.5rem; border-bottom: 3px solid var(--ink); margin-bottom: 0.5rem; }
-  h1 { font-size: clamp(3rem, 8vw, 6rem); }
-  .lead { margin: 1rem 0 0; }
+  .section-head .name { color: var(--text); font-size: 1rem; }
+  .section-head .name:hover { color: var(--accent); }
 </style>
