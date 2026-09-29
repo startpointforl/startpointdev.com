@@ -13,9 +13,8 @@ export const SITE = {
     linkedin: 'https://www.linkedin.com/in/startpointforl/',
     email: 'startpoint.dev.kotova@gmail.com',
   },
-  // Заполнить после создания шаблона на instantview.telegram.org (см. instant-view/README.md).
-  // Пока пусто — кнопка «Ссылка для Telegram» копирует обычный URL.
-  instantViewRhash: '',
+  // Идентификатор шаблона на instantview.telegram.org (см. instant-view/README.md)
+  instantViewRhash: '314c6dcb3a6af8',
 };
 
 export function instantViewUrl(url: string) {

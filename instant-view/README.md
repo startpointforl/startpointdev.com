@@ -3,6 +3,11 @@
 Карточка ссылки (заголовок, описание, картинка) работает сразу — через Open Graph теги.
 Кнопка **⚡ Instant View** требует отдельного шаблона.
 
+## Статус
+
+Шаблон сохранён на instantview.telegram.org (аккаунт Anastasia Kotova), `rhash` = `314c6dcb3a6af8`,
+он прописан в `src/data/site.ts`. Копия шаблона — [`template.txt`](./template.txt).
+
 ## Как настроить (один раз)
 
 1. Открой https://instantview.telegram.org и залогинься через Telegram.

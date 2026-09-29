@@ -1,20 +1,14 @@
 ~version: "2.1"
 
-# Шаблон Instant View для startpointdev.com.
-# Вставить в редактор на https://instantview.telegram.org/my/startpointdev.com
-# Работает только для страниц статей.
+# startpointdev.com: статьи /blog/<slug>/
 ?path: /blog/.+
 
 channel: "@startpoint_dev"
 
-title:          //article//h1
-author:         //article//*[has-class("author")]
+title: //article//h1
+author: //article//*[has-class("author")]
 published_date: //article//time/@datetime
-description:    //meta[@property="og:description"]/@content
-image_url:      //meta[@property="og:image"]/@content
+description: //meta[@property="og:description"]/@content
+image_url: //meta[@property="og:image"]/@content
 
 body: //article//div[has-class("article-body")]
-
-# Кнопки и прочий интерфейс в IV не нужны
-@remove: //article/footer
-@remove: //button
