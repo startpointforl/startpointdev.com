@@ -28,13 +28,13 @@ export const about: Record<Lang, string[]> = {
   ru: [
     'Коммерческой разработкой занимаюсь с декабря 2017 года, с программированием и вебом знакома с 2013. Сейчас — senior-разработчица в Яндексе. Выросла из full-stack’а на PHP и jQuery в эксперта по современному JavaScript и Node.js.',
     'Внутренняя кухня технологий — мой любимый фокус: люблю понимать, как всё устроено, и рассказывать об этом другим. Выступаю на конференциях, пишу статьи и веду Telegram-канал про разработку.',
-    'AI-инструменты в разработке — моя главная тема последнего времени. Внедряю их в команде из 20+ человек и развиваю свой личный AI-харнесс: обычно у меня параллельно работают 5–6 агентов, а я ставлю им задачи, координирую и проверяю результат. Так в том числе пишу проекты на Python и Go. Экспериментирую с AI на разных уровнях: от кода и рабочих процессов до повседневных дел.',
+    'Сейчас я глубоко погружена в AI-инструменты для разработки. Внедряю их в команде из 20+ человек и развиваю свой личный AI-харнесс: обычно у меня параллельно работают 5–6 агентов, а я ставлю им задачи, координирую и проверяю результат. Так в том числе пишу проекты на Python и Go. Экспериментирую с AI на разных уровнях: от кода и рабочих процессов до повседневных дел.',
     'Мне важны не только качество кода, но и качество процессов: участвовала в запуске проектов с нуля, проводила кастдевы, писала ТЗ, настраивала инфраструктуру и деплой, нанимала разработчиков.',
   ],
   en: [
     'I’ve been doing commercial development since December 2017 and have been into programming and the web since 2013. Now I’m a senior developer at Yandex. I grew from a PHP-and-jQuery full-stack developer into an expert in modern JavaScript and Node.js.',
     'The internals of technology are my favourite focus: I love understanding how things work under the hood and explaining it to others. I speak at conferences, write articles and run a Telegram channel about development.',
-    'AI tooling for development has become my main focus lately. I’m rolling it out in a team of 20+ engineers and evolving my own AI harness: I usually have 5–6 agents working in parallel while I set tasks, coordinate and review their output. That’s also how I build projects in Python and Go. I experiment with AI on every level — from code and team workflows to everyday life.',
+    'These days I’m deeply immersed in AI tooling for development. I’m rolling it out in a team of 20+ engineers and evolving my own AI harness: I usually have 5–6 agents working in parallel while I set tasks, coordinate and review their output. That’s also how I build projects in Python and Go. I experiment with AI on every level — from code and team workflows to everyday life.',
     'I care about the quality of processes as much as the quality of code: I’ve launched projects from scratch, run customer interviews, written specs, set up infrastructure and deployment, and hired developers.',
   ],
 };

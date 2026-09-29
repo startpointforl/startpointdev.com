@@ -30,6 +30,7 @@ export const ui = {
     'share.telegram': 'скопировать ссылку для telegram',
     'link.newTab': 'откроется в новой вкладке',
     'share.copied': 'скопировано',
+    'share.failed': 'не получилось скопировать',
   },
   en: {
     'nav.home': 'home',
@@ -59,6 +60,7 @@ export const ui = {
     'cv.beyond': 'Beyond work',
     'share.telegram': 'Copy link for Telegram',
     'share.copied': 'Copied',
+    'share.failed': 'Could not copy',
     'link.newTab': 'opens in a new tab',
   },
 } as const;

@@ -6,23 +6,41 @@ interface Props { url: string }
 const tr = t('ru');
 ---
 
-<button class="btn share" type="button" data-url={instantViewUrl(Astro.props.url)} data-done={tr('share.copied')}>
+<button class="btn share" type="button" data-url={instantViewUrl(Astro.props.url)} data-done={tr('share.copied')} data-fail={tr('share.failed')}>
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.2 13 1.4 11.5c-1-.3-1.1-1 .2-1.5L20.5 2.8c.9-.3 1.7.2 1.4 1.5z"/></svg>
   <span>{tr('share.telegram')}</span>
 </button>
 
 <script>
+  // Clipboard API работает только на HTTPS, поэтому есть запасной путь через execCommand
+  function copyFallback(text: string) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+    document.body.append(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  }
+
+  async function copy(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      return copyFallback(text);
+    }
+  }
+
   document.querySelectorAll<HTMLButtonElement>('.share').forEach((btn) => {
+    const label = btn.querySelector('span')!;
+    const original = label.textContent;
     btn.addEventListener('click', async () => {
-      const label = btn.querySelector('span')!;
-      const original = label.textContent;
-      try {
-        await navigator.clipboard.writeText(btn.dataset.url!);
-        label.textContent = btn.dataset.done!;
-        setTimeout(() => (label.textContent = original), 1500);
-      } catch {
-        window.prompt('', btn.dataset.url);
-      }
+      const ok = await copy(btn.dataset.url!);
+      label.textContent = ok ? btn.dataset.done! : btn.dataset.fail!;
+      setTimeout(() => (label.textContent = original), 1800);
     });
   });
 </script>
