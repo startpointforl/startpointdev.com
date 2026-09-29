@@ -110,10 +110,7 @@ h1, h2, h3 { font-family: var(--mono); font-weight: 400; margin: 0; }
 .prose a:hover { color: var(--accent); }
 .prose li + li { margin-top: 0.3em; }
 .prose img { max-width: 100%; height: auto; display: block; border-radius: 4px; }
-.prose figure { margin: 2rem 0; }
-/* Подпись к картинке в Markdown: курсивный абзац сразу после картинки */
-.prose p:has(> img:only-child) + p:has(> em:only-child) { font: 400 0.85rem/1.4 var(--sans); color: var(--muted); margin-top: 0.5rem; }
-.prose p:has(> img:only-child) + p:has(> em:only-child) em { font-style: normal; }
+.prose figure { margin: 1.8em 0; }
 .prose figcaption { font: 400 0.85rem/1.4 var(--sans); color: var(--muted); margin-top: 0.5rem; }
 .prose blockquote { margin: 1.6em 0; padding: 0.1em 0 0.1em 1.1em; border-left: 3px solid var(--accent); color: var(--muted); font-style: italic; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5em 0; }

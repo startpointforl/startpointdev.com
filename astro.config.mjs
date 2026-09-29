@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import rehypeExternalLinks from 'rehype-external-links';
+import rehypeFigures from './src/lib/rehype-figures.mjs';
 
 export default defineConfig({
   site: 'https://startpointdev.com',
@@ -22,7 +23,7 @@ export default defineConfig({
   image: { layout: 'constrained' },
   markdown: {
     // Внешние ссылки в статьях открываются в новой вкладке
-    rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: ['noopener'] }]],
+    rehypePlugins: [rehypeFigures, [rehypeExternalLinks, { target: '_blank', rel: ['noopener'] }]],
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
     },
