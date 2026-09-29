@@ -196,17 +196,3 @@ fs.readFile(__filename, () => {
 - И можно ли сделать Node.js реально многопоточным?
 
 Event Loop, да и сам Node.js — это глубокая тема, и мы только начали разбираться в его механиках. Дальше — больше!
-
----
-
-### Следующие части
-
-[Event Loop крутится, Node.js мутится. Часть 2. Нюансы работы Event Loop.](https://telegra.ph/Event-Loop-NodeJS-part2-03-15)
-
-[Event Loop крутится, Node.js мутится. Часть 3. За пределами Event Loop.](https://telegra.ph/Event-Loop-NodeJS-part3-03-22)
-
-[Event Loop крутится, Node.js мутится. Часть 4. HTTP-сервер.](https://telegra.ph/Event-Loop-NodeJS-part4-03-29)
-
-[Event Loop крутится, Node.js мутится. Часть 5. Настоящая многопоточность.](https://telegra.ph/Event-Loop-NodeJS-part4-04-03)
-
-[Event Loop крутится, Node.js мутится. Часть 6. Профилировать и замерять.](https://telegra.ph/Event-Loop-NodeJS-part6-04-12)

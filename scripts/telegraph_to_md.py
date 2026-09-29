@@ -223,6 +223,52 @@ class Converter:
         return name
 
 
+SERIES_NAV = re.compile(r'(следующ|предыдущ|други|все|остальн)\w*\s+(част|стат)|част\w*\s+цикла|весь цикл|оглавление', re.I)
+
+
+def plain(node) -> str:
+    if isinstance(node, str):
+        return node
+    return ''.join(plain(c) for c in node.get('children') or [])
+
+
+def is_link_only(node) -> bool:
+    """Абзац или список, состоящий только из ссылок на Телеграф"""
+    if isinstance(node, str):
+        return not node.strip()
+    tag = node.get('tag')
+    kids = [c for c in node.get('children') or [] if not (isinstance(c, str) and not c.strip())]
+    if tag == 'a':
+        href = (node.get('attrs') or {}).get('href', '')
+        return href.startswith('/') or 'telegra.ph/' in href
+    if tag in ('p', 'li', 'ul', 'ol', 'strong', 'em') and kids:
+        return all(is_link_only(c) for c in kids)
+    if tag == 'br':
+        return True
+    return False
+
+
+def strip_series_nav(content: list, removed: list) -> list:
+    """Убирает ручные блоки «Следующие части» — на сайте навигация по циклу своя"""
+    out = list(content)
+    i = 0
+    while i < len(out):
+        node = out[i]
+        if isinstance(node, dict) and node.get('tag') in ('h3', 'h4', 'p') and SERIES_NAV.search(plain(node)) \
+                and len(plain(node)) < 80:
+            j = i + 1
+            while j < len(out) and is_link_only(out[j]):
+                j += 1
+            if j > i + 1:
+                start = i - 1 if i > 0 and isinstance(out[i - 1], dict) and out[i - 1].get('tag') == 'hr' else i
+                removed.append(' | '.join(plain(n).strip() for n in out[start:j] if plain(n).strip()))
+                del out[start:j]
+                i = start
+                continue
+        i += 1
+    return out
+
+
 def yaml_str(s: str) -> str:
     return '"' + s.replace('\\', '\\\\').replace('"', '\\"') + '"'
 
@@ -245,7 +291,9 @@ def main():
         old.unlink()
 
     conv = Converter(a.slug, out_dir, migrated_links())
-    body = '\n\n'.join(b for b in conv.blocks(page['content']) if b) + '\n'
+    removed = []
+    content = strip_series_nav(page['content'], removed)
+    body = '\n\n'.join(b for b in conv.blocks(content) if b) + '\n'
 
     description = a.description or re.sub(r'\s+', ' ', page.get('description', '')).strip()
     fm = ['---', f'title: {yaml_str(page["title"])}', f'description: {yaml_str(description)}',
@@ -256,6 +304,8 @@ def main():
     (out_dir / 'index.md').write_text('\n'.join(fm) + '\n' + body)
 
     print(f'OK {a.slug}: {len(body)} символов, картинок: {conv.images}')
+    for r in removed:
+        print('  - удалён блок навигации:', r[:160])
     for issue in sorted(set(conv.issues)):
         print('  !', issue)
 
