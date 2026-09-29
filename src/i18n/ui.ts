@@ -28,6 +28,7 @@ export const ui = {
     'cv.education': 'Образование',
     'cv.beyond': 'Кроме работы',
     'share.telegram': 'скопировать ссылку для telegram',
+    'link.newTab': 'откроется в новой вкладке',
     'share.copied': 'скопировано',
   },
   en: {
@@ -58,6 +59,7 @@ export const ui = {
     'cv.beyond': 'Beyond work',
     'share.telegram': 'Copy link for Telegram',
     'share.copied': 'Copied',
+    'link.newTab': 'opens in a new tab',
   },
 } as const;
 

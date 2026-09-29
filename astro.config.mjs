@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import rehypeExternalLinks from 'rehype-external-links';
 
 export default defineConfig({
   site: 'https://startpointdev.com',
@@ -20,6 +21,8 @@ export default defineConfig({
   // Картинки в статьях: WebP, набор размеров под экраны (srcset), ширина не больше колонки текста
   image: { layout: 'constrained' },
   markdown: {
+    // Внешние ссылки в статьях открываются в новой вкладке
+    rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: ['noopener'] }]],
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
     },

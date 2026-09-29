@@ -25,15 +25,18 @@ const common = { alt, widths: [240, 480, 720], sizes: '(max-width: 640px) 11rem,
 )}
 
 <style>
-  .portrait { aspect-ratio: 5 / 6; border-radius: 6px; overflow: hidden; }
-  .img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
-  .dark { display: none; }
-  :global(:root[data-theme='dark']) .light:has(+ .dark) { display: none; }
-  :global(:root[data-theme='dark']) .dark { display: block; }
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme='light'])) .light:has(+ .dark) { display: none; }
-    :global(:root:not([data-theme='light'])) .dark { display: block; }
+  .portrait { position: relative; aspect-ratio: 5 / 6; border-radius: 6px; overflow: hidden; }
+  .img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: 50% 20%; transition: opacity 0.6s ease;
   }
+  /* Фото для тёмной темы лежит поверх и плавно проявляется */
+  .dark { opacity: 0; }
+  :global(:root[data-theme='dark']) .dark { opacity: 1; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .dark { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .img { transition: none; } }
   .placeholder {
     display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line);
     font: 400 3rem var(--mono); color: var(--muted);

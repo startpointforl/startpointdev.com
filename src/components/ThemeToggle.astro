@@ -5,19 +5,31 @@ interface Props { label: string }
 <button class="theme-toggle" type="button" aria-label={Astro.props.label} title={Astro.props.label}>◐</button>
 
 <style>
-  .theme-toggle { font: 400 15px var(--mono); padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; }
-  .theme-toggle:hover { color: var(--accent); }
+  .theme-toggle {
+    display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem; margin: -0.5rem -0.4rem;
+    font: 400 1.2rem/1 var(--mono); border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer;
+  }
+  .theme-toggle:hover { color: var(--accent); background: var(--surface); }
 </style>
 
 <script>
   const root = document.documentElement;
   const media = window.matchMedia('(prefers-color-scheme: dark)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function apply(next: string) {
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+  }
+
   document.querySelectorAll('.theme-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
       const current = root.dataset.theme ?? (media.matches ? 'dark' : 'light');
       const next = current === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = next;
-      try { localStorage.setItem('theme', next); } catch {}
+      // Новая тема «наезжает» на страницу по диагонали (View Transitions API).
+      // Где API нет или включено «уменьшение движения» — просто переключаем.
+      if (!document.startViewTransition || reduceMotion.matches) return apply(next);
+      document.startViewTransition(() => apply(next));
     });
   });
 </script>

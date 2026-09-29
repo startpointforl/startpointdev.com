@@ -18,9 +18,7 @@ const { articles, numbered = false, current } = Astro.props;
       <div>
         <a class="t" href={`/blog/${a.id}/`}>{a.data.title}</a>
         {a.data.draft && <span class="badge">draft</span>}
-        <div class="g">
-          {numbered ? formatIso(a.data.date) : a.data.tags.map((tag) => `#${tag}`).join(' ')}
-        </div>
+        {numbered && <div class="g">{formatIso(a.data.date)}</div>}
       </div>
     </li>
   ))}

@@ -10,6 +10,8 @@ export interface Job {
   project: L10n;
   period: L10n;
   points: Record<Lang, string[]>;
+  /** Основной стек на этом месте работы */
+  stack?: string[];
 }
 
 export const headline: L10n = {
@@ -35,16 +37,24 @@ export const about: Record<Lang, string[]> = {
   ],
 };
 
-export const beyondWork: Record<Lang, string[]> = {
+export const beyondWork: Record<Lang, { text: string; link?: { href: string; label: string } }[]> = {
   ru: [
-    'преподавала школьникам основы программирования;',
-    'вместе с коллегой запустила авторский мини-курс по React и фронтенду;',
-    'подготовила и провела 4 из 8 лекций курса и практические задания к ним.',
+    {
+      text: 'читала лекцию «Инфраструктура» (часть 2) в Школе разработки интерфейсов Яндекса, 2026;',
+      link: { href: 'https://www.youtube.com/watch?v=oUQauacFpBY', label: 'видео' },
+    },
+    { text: 'преподавала школьникам основы программирования;' },
+    { text: 'вместе с коллегой запустила авторский мини-курс по React и фронтенду;' },
+    { text: 'подготовила и провела 4 из 8 лекций курса и практические задания к ним.' },
   ],
   en: [
-    'taught programming basics to school students;',
-    'co-launched a short course on React and frontend development;',
-    'prepared and delivered 4 of its 8 lectures along with the practical assignments.',
+    {
+      text: 'gave the “Infrastructure” lecture (part 2) at the Yandex School of Interface Development, 2026;',
+      link: { href: 'https://www.youtube.com/watch?v=oUQauacFpBY', label: 'video, in Russian' },
+    },
+    { text: 'taught programming basics to school students;' },
+    { text: 'co-launched a short course on React and frontend development;' },
+    { text: 'prepared and delivered 4 of its 8 lectures along with the practical assignments.' },
   ],
 };
 
@@ -57,22 +67,22 @@ export const skills: { title: L10n; items: Record<Lang, string[]> }[] = [
   {
     title: { ru: 'Языки и технологии', en: 'Languages' },
     items: {
-      ru: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'PHP и Kotlin — базово'],
-      en: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'PHP and Kotlin (basic)'],
+      ru: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'Python, Go, PHP и Kotlin — базово'],
+      en: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'Python, Go, PHP and Kotlin (basic)'],
     },
   },
   {
     title: { ru: 'Фреймворки и библиотеки', en: 'Frameworks & libraries' },
     items: {
-      ru: ['React', 'Preact', 'Next.js', 'NestJS', 'GraphQL', 'Apollo', 'Styled Components', 'CSS Modules'],
-      en: ['React', 'Preact', 'Next.js', 'NestJS', 'GraphQL', 'Apollo', 'Styled Components', 'CSS Modules'],
+      ru: ['React', 'Preact', 'Next.js', 'NestJS', 'Effector', 'GraphQL', 'Apollo', 'Styled Components', 'CSS Modules'],
+      en: ['React', 'Preact', 'Next.js', 'NestJS', 'Effector', 'GraphQL', 'Apollo', 'Styled Components', 'CSS Modules'],
     },
   },
   {
     title: { ru: 'Инфраструктура', en: 'Infrastructure' },
     items: {
-      ru: ['CI/CD (внутренние инструменты Яндекса, AWS)', 'Docker', 'балансировщики и деплой', 'MongoDB', 'Redis', 'SQL', 'Strapi', 'работа с легаси'],
-      en: ['CI/CD (Yandex internal tools, AWS)', 'Docker', 'load balancers and deployment', 'MongoDB', 'Redis', 'SQL', 'Strapi', 'legacy code'],
+      ru: ['CI/CD (внутренние инструменты Яндекса, AWS)', 'Docker', 'Terraform', 'балансировщики и деплой', 'PostgreSQL', 'MongoDB', 'Redis', 'Strapi', 'работа с легаси'],
+      en: ['CI/CD (Yandex internal tools, AWS)', 'Docker', 'Terraform', 'load balancers and deployment', 'PostgreSQL', 'MongoDB', 'Redis', 'Strapi', 'legacy code'],
     },
   },
   {
@@ -109,6 +119,7 @@ export const jobs: Job[] = [
         'The platform lets small and medium businesses accept Yandex Pay payments on their websites and attract customers through integrations with other Yandex products such as Direct, Delivery and Search.',
       ],
     },
+    stack: ['Python', 'Go', 'PostgreSQL', 'Terraform', 'TypeScript', 'React', 'Next.js', 'NestJS', 'Effector'],
   },
   {
     role: 'Senior Frontend Developer',

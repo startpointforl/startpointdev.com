@@ -66,7 +66,6 @@ const jsonLd = graph(
       <h1>{title}</h1>
       <p class="meta">
         <span class="author">{SITE.author[lang]}</span> · <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
-        {tags.length > 0 && <span class="tags"> · {tags.map((tag) => `#${tag}`).join(' ')}</span>}
       </p>
       {nav && nav.parts.length > 1 && (
         <details class="toc">

@@ -27,9 +27,9 @@ const now = Date.now();
           {abstracts && talk.abstract && lang === 'ru' && <p class="a">{talk.abstract}</p>}
           {(talk.video || talk.slides || talk.page) && (
             <div class="l">
-              {talk.video && <a href={talk.video}>▶ {tr('talks.video')}</a>}
-              {talk.slides && <a href={talk.slides}>{tr('talks.slides')}</a>}
-              {talk.page && <a href={talk.page}>{tr('talks.page')} ↗</a>}
+              {talk.video && <a href={talk.video} target="_blank" rel="noopener" title={tr('link.newTab')}>{tr('talks.video')} ↗</a>}
+              {talk.slides && <a href={talk.slides} target="_blank" rel="noopener" title={tr('link.newTab')}>{tr('talks.slides')} ↗</a>}
+              {talk.page && <a href={talk.page} target="_blank" rel="noopener" title={tr('link.newTab')}>{tr('talks.page')} ↗</a>}
             </div>
           )}
         </div>

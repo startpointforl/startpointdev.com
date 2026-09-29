@@ -9,9 +9,9 @@ const { lang } = Astro.props;
 <footer class="wide"><div class="footer">
   <span>© {new Date().getFullYear()} {SITE.author[lang]}</span>
   <nav>
-    <a href={SITE.links.telegram}>telegram</a>
-    <a href={SITE.links.linkedin}>linkedin</a>
-    <a href={SITE.links.github}>github</a>
+    <a href={SITE.links.telegram} target="_blank" rel="noopener">telegram</a>
+    <a href={SITE.links.linkedin} target="_blank" rel="noopener">linkedin</a>
+    <a href={SITE.links.github} target="_blank" rel="noopener">github</a>
     <a href={`mailto:${SITE.links.email}`}>email</a>
     <a href="/rss.xml">rss</a>
   </nav>
@@ -22,5 +22,5 @@ const { lang } = Astro.props;
     display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem 1.5rem;
     margin: 5rem 0 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font: 400 14px var(--mono); color: var(--muted);
   }
-  nav { display: flex; gap: 1.25rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; }
 </style>

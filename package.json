@@ -9,6 +9,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource/pt-mono": "^5.3.0",
@@ -16,6 +17,7 @@
     "@fontsource/pt-serif": "^5.3.0",
     "astro": "^7.3.5",
     "astro-og-canvas": "^0.13.2",
-    "canvaskit-wasm": "^0.42.0"
+    "canvaskit-wasm": "^0.42.0",
+    "rehype-external-links": "^3.0.0"
   }
 }
