@@ -153,7 +153,7 @@ export const jobs: Job[] = [
         'Full-stack development: Next.js + NestJS + MongoDB. Implemented simple database migrations and business logic, added cron tasks, set up and improved CI/CD.',
       ],
     },
-    stack: ['TypeScript', 'React', 'Next.js', 'NestJS', 'MongoDB', 'Effector'],
+    stack: ['TypeScript', 'React', 'Next.js', 'NestJS', 'MongoDB', 'Effector', 'i-bem', 'Testplane'],
   },
   {
     role: 'Team Lead',
@@ -239,7 +239,7 @@ export const jobs: Job[] = [
         'Worked in a full product team (PM, QA, backend, design).',
       ],
     },
-    stack: ['Preact (class components, hooks)', 'Stylus', 'Razor (C#)', 'GTM'],
+    stack: ['Preact', 'Stylus', 'Razor (C#)', 'GTM'],
   },
   {
     role: 'Junior Full-stack Developer',
