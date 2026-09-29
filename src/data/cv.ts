@@ -1,4 +1,4 @@
-// CV на двух языках. Источник — тексты с Тильды (Notion, «Сайт-визитка»).
+// CV на двух языках. Русский текст опыта — дословно с Тильды (Notion, «Сайт-визитка»), не сокращать.
 // Порядок опыта — от нового к старому.
 
 type Lang = 'ru' | 'en';
@@ -40,21 +40,21 @@ export const about: Record<Lang, string[]> = {
 export const beyondWork: Record<Lang, { text: string; link?: { href: string; label: string } }[]> = {
   ru: [
     {
-      text: 'читала лекцию «Инфраструктура» (часть 2) в Школе разработки интерфейсов Яндекса, 2026;',
+      text: 'читала лекцию «Инфраструктура» (часть 2) в Школе разработки интерфейсов Яндекса в 2026 году;',
       link: { href: 'https://www.youtube.com/watch?v=oUQauacFpBY', label: 'видео' },
     },
     { text: 'преподавала школьникам основы программирования;' },
-    { text: 'вместе с коллегой запустила авторский мини-курс по React и фронтенду;' },
-    { text: 'подготовила и провела 4 из 8 лекций курса и практические задания к ним.' },
+    { text: 'совместно с коллегой запустила авторский мини-курс по React и фронтенду;' },
+    { text: 'в рамках него самостоятельно подготовила и провела 4 из 8 лекций, а также практические задания.' },
   ],
   en: [
     {
-      text: 'gave the “Infrastructure” lecture (part 2) at the Yandex School of Interface Development, 2026;',
+      text: 'gave the “Infrastructure” lecture (part 2) at the Yandex School of Interface Development in 2026;',
       link: { href: 'https://www.youtube.com/watch?v=oUQauacFpBY', label: 'video, in Russian' },
     },
     { text: 'taught programming basics to school students;' },
-    { text: 'co-launched a short course on React and frontend development;' },
-    { text: 'prepared and delivered 4 of its 8 lectures along with the practical assignments.' },
+    { text: 'together with a colleague, launched my own short course on React and frontend;' },
+    { text: 'as part of it, prepared and delivered 4 of the 8 lectures on my own, along with the practical assignments.' },
   ],
 };
 
@@ -109,14 +109,14 @@ export const jobs: Job[] = [
     period: { ru: 'февраль 2026 — сейчас', en: 'Feb 2026 — present' },
     points: {
       ru: [
-        'Full-stack-разработка в B2B-платформе Яндекс Пэй: продуктовые фичи в нескольких бэкенд-микросервисах, во фронтенд-приложениях и в модулях для CMS (Битрикс, Тильда, WordPress).',
-        'Внедряю и развиваю AI-инструменты в команде из 20+ человек и улучшаю свой AI-харнесс. Это ускоряет доставку фич и расширяет число сервисов, в которые может коммитить каждый разработчик.',
-        'Платформа позволяет малому и среднему бизнесу подключать оплаты через Яндекс Пэй на своих сайтах и привлекать клиентов через интеграции с другими продуктами Яндекса: Директом, Доставкой, Поиском.',
+        'В настоящее время занимаюсь full-stack разработкой в платформе для бизнеса Яндекс Пэй. Реализую продуктовые фичи в нескольких микросервисах на бэкенде и во фронтенд-приложениях, а также в различных модулях для CMS (Битрикс, Тильда, WordPress).',
+        'Активно внедряю и развиваю AI-инструменты в команде из 20+ человек, а также улучшаю свой личный AI-харнесс. Вклад в использование ИИ в команде позволяет увеличить скорость доставки фич, а также расширить количество сервисов, в которые может коммитить каждый разработчик.',
+        'B2B-платформа — это сервис, который позволяет малому и среднему бизнесу подключать и настраивать оплаты на своих сайтах через Яндекс Пэй, а также работать над привлечением клиентов, интегрируясь с другими продуктами Яндекса (например, Яндекс Директ, Яндекс Доставка или Яндекс Поиск).',
       ],
       en: [
-        'Full-stack development on the Yandex Pay B2B platform: product features across several backend microservices, frontend apps and CMS modules (Bitrix, Tilda, WordPress).',
-        'Rolling out and evolving AI tooling in a team of 20+ engineers and refining my own AI harness. This speeds up feature delivery and widens the set of services each engineer can contribute to.',
-        'The platform lets small and medium businesses accept Yandex Pay payments on their websites and attract customers through integrations with other Yandex products such as Direct, Delivery and Search.',
+        'I currently do full-stack development on the Yandex Pay business platform. I build product features across several backend microservices and frontend applications, as well as in various CMS modules (Bitrix, Tilda, WordPress).',
+        'I actively roll out and evolve AI tooling in a team of 20+ people and keep improving my personal AI harness. Bringing AI into the team’s work increases feature delivery speed and expands the number of services each developer can commit to.',
+        'The B2B platform is a service that lets small and medium businesses connect and configure Yandex Pay payments on their websites and attract customers by integrating with other Yandex products (for example, Yandex Direct, Yandex Delivery or Yandex Search).',
       ],
     },
     stack: ['Python', 'Go', 'PostgreSQL', 'Terraform', 'TypeScript', 'React', 'Next.js', 'NestJS', 'Effector'],
@@ -124,16 +124,18 @@ export const jobs: Job[] = [
   {
     role: 'Senior Frontend Developer',
     company: { ru: 'Яндекс', en: 'Yandex' },
-    project: { ru: 'Летние школы, Яндекс Контест', en: 'Summer Schools, Yandex Contest' },
+    project: { ru: 'Летние школы Яндекса, Яндекс Контест', en: 'Yandex Summer Schools, Yandex Contest' },
     period: { ru: 'май 2024 — январь 2026', en: 'May 2024 — Jan 2026' },
     points: {
       ru: [
-        'За пару месяцев обновила LMS Летних школ (ШРИ, ШБР, ШМЯ и др.): визуальный редизайн и технические доработки, улучшение UX для менторов и студентов.',
-        'В Яндекс Контесте — интерфейсы для администраторов и участников, бесшовный переезд с Webpack 4 на Vite, работа с легаси (i-bem), CI/CD, скриншотные тесты.',
+        'Обновила интерфейс LMS для Летних школ (ШРИ, ШБР, ШМЯ и др.): визуальный редизайн и технические доработки за пару месяцев, как итог — улучшение UX для менторов и студентов, что повышает лояльность потенциальных кандидатов к Яндексу.',
+        'После — переход в Яндекс Контест: работа над интерфейсами для администраторов и участников, технический апгрейд, в том числе: бесшовный переезд с Webpack 4 на Vite, работа с легаси (i-bem), поддержка CI/CD, покрытие фич скриншотными тестами.',
+        'Сейчас Яндекс Контест является одной из важнейших площадок в образовательной деятельности Яндекса, а также участвует в части процессов, связанных с наймом (Летние школы, One Day Offer и т. д.).',
       ],
       en: [
-        'Revamped the Summer Schools LMS within a couple of months: visual redesign and technical improvements, better UX for mentors and students.',
-        'At Yandex Contest: admin and participant interfaces, seamless migration from Webpack 4 to Vite, legacy (i-bem) maintenance, CI/CD, screenshot testing.',
+        'Updated the LMS interface for the Summer Schools (School of Interface Development, School of Backend Development, School of Mobile Development and others): a visual redesign and technical improvements within a couple of months, resulting in better UX for mentors and students and higher loyalty of potential candidates to Yandex.',
+        'Then moved to Yandex Contest: interfaces for administrators and participants and a technical upgrade, including a seamless migration from Webpack 4 to Vite, work with legacy code (i-bem), CI/CD support and screenshot test coverage for features.',
+        'Yandex Contest is one of the key platforms of Yandex’s educational activities and is also part of hiring processes (Summer Schools, One Day Offer, etc.).',
       ],
     },
   },
@@ -144,14 +146,16 @@ export const jobs: Job[] = [
     period: { ru: 'январь 2023 — апрель 2024', en: 'Jan 2023 — Apr 2024' },
     points: {
       ru: [
-        'Как техлид вела проект по развитию внутренней карьеры сотрудников (поиск вакансий, грейдовое развитие), затем обновляла Яндекс Интервью.',
-        'Фича-лидство и функции продакт-менеджера: защита фич, презентации, внутренняя аналитика.',
-        'Full-stack на Next.js + NestJS + MongoDB: миграции, бизнес-логика, cron-задачи, CI/CD.',
+        'Вела как техлид проект по развитию внутренней карьеры сотрудников (поиск вакансий, грейдовое развитие).',
+        'Затем обновляла Яндекс Интервью — проект с высокой чувствительностью к качеству интерфейса и стабильности.',
+        'Занималась фича-лидством, принимала на себя функции product manager: защита фичей, презентации, внутренняя аналитика.',
+        'Разработка full-stack: Next.js + NestJS + MongoDB. Реализовывала простые миграции в БД, бизнес-логику, добавила cron-таски, настраивала и улучшала CI/CD.',
       ],
       en: [
-        'As tech lead, drove an internal career-growth product (job search, grade development), then modernized Yandex Interview.',
-        'Feature leadership with product-manager duties: pitching features, presentations, internal analytics.',
-        'Full-stack with Next.js + NestJS + MongoDB: migrations, business logic, cron jobs, CI/CD.',
+        'Led, as tech lead, a project for employees’ internal career growth (job search, grade development).',
+        'Then updated Yandex Interview — a project highly sensitive to interface quality and stability.',
+        'Did feature leadership and took on product manager duties: defending features, presentations, internal analytics.',
+        'Full-stack development: Next.js + NestJS + MongoDB. Implemented simple database migrations and business logic, added cron tasks, set up and improved CI/CD.',
       ],
     },
   },
@@ -162,25 +166,37 @@ export const jobs: Job[] = [
     period: { ru: 'январь 2022 — январь 2023', en: 'Jan 2022 — Jan 2023' },
     points: {
       ru: [
-        'Тимлид frontend-команды (2–6 человек): сайт вакансий Яндекса, CRM для рекрутеров и нанимающих менеджеров, платформа Яндекс Интервью.',
-        'Выстроила команду и процессы, вела крупные фичи, снижающие нагрузку на найм и усиливающие HR-бренд. Запустила миграцию CRM с i-bem на React.',
-        'Проводила технические и финальные собеседования, наняла 4 разработчиков — все проработали в компании больше трёх лет.',
+        'Тимлид frontend-команды (от 2 до 6 человек) в проектах по найму: сайт вакансий Яндекса, внутренняя CRM для рекрутеров и нанимающих менеджеров, платформа Яндекс Интервью.',
+        'Формировала команду и процессы. Вела большие фичи, сокращающие нагрузку на найм (в т. ч. постановку AA-собеседований), и улучшающие HR-бренд.',
+        'Стартовали технический рефакторинг CRM — миграция с i-bem на React.',
+        'Проводила собеседования (технические и финальные), наняла 4 разработчиков, которые более 3 лет проработали в компании.',
+        'Работала с CI, покрывала код автотестами (e2e, скриншотные).',
       ],
       en: [
-        'Led a frontend team of 2–6: the Yandex careers site, a CRM for recruiters and hiring managers, the Yandex Interview platform.',
-        'Built the team and processes; drove large features that reduced hiring workload and strengthened the employer brand. Kicked off the CRM migration from i-bem to React.',
-        'Ran technical and final interviews and hired 4 engineers, all of whom stayed with the company for 3+ years.',
+        'Team lead of a frontend team (2 to 6 people) in hiring products: the Yandex careers site, an internal CRM for recruiters and hiring managers, and the Yandex Interview platform.',
+        'Built the team and processes. Led large features that reduced the hiring workload (including scheduling of AA interviews) and improved the employer brand.',
+        'Kicked off a technical refactoring of the CRM — a migration from i-bem to React.',
+        'Conducted interviews (technical and final) and hired 4 developers, all of whom worked at the company for more than 3 years.',
+        'Worked with CI and covered code with automated tests (e2e, screenshot).',
       ],
     },
   },
   {
     role: 'Frontend Developer',
     company: { ru: 'Яндекс', en: 'Yandex' },
-    project: { ru: 'Яндекс Контест, проекты найма', en: 'Yandex Contest, hiring' },
+    project: { ru: 'Яндекс Контест, проекты найма', en: 'Yandex Contest, hiring products' },
     period: { ru: 'август 2021 — январь 2022', en: 'Aug 2021 — Jan 2022' },
     points: {
-      ru: ['Интерфейсы One Day Offer и Weekend Offer на Яндекс Контесте: регистрация, отправка и проверка решений. Фича-лидство, настройка CI/CD-пайплайнов, работа с легаси (i-bem, fist).'],
-      en: ['Built One Day Offer and Weekend Offer flows on Yandex Contest: registration, submissions, grading. Feature leadership, CI/CD pipelines, legacy code (i-bem, fist).'],
+      ru: [
+        'Разработка интерфейса для мероприятий One Day Offer и Weekend Offer на платформе Яндекс Контест (регистрация, отправка решений, проверка).',
+        'Фича-лидство. Работала с экосистемой внутренних CI/CD-инструментов Яндекса и участвовала в настройке пайплайнов.',
+        'Также работала с легаси (i-bem, fist), несмотря на отсутствие экспертизы в команде.',
+      ],
+      en: [
+        'Developed the interface for One Day Offer and Weekend Offer events on the Yandex Contest platform (registration, solution submission, grading).',
+        'Feature leadership. Worked with the ecosystem of Yandex’s internal CI/CD tools and helped set up pipelines.',
+        'Also worked with legacy code (i-bem, fist) despite the lack of expertise in the team.',
+      ],
     },
   },
   {
@@ -190,23 +206,39 @@ export const jobs: Job[] = [
     period: { ru: 'август 2020 — июль 2021', en: 'Aug 2020 — Jul 2021' },
     points: {
       ru: [
-        'Подняла frontend с нуля: Next.js, TypeScript, Styled Components, GraphQL (Apollo). Позже — full-stack на Node.js, Strapi, MongoDB, CI/CD на AWS.',
-        'Спроектировала и реализовала реалтайм-аукцион по аналогии с eBay: ТЗ со статусами, таймерами и логикой переходов, frontend с live-обновлениями.',
+        'Создавали маркетплейс строительной техники для зарубежного заказчика.',
+        'Поднимала и разрабатывала frontend с нуля с использованием Next.js, TypeScript, Styled Components, GraphQL (Apollo).',
+        'Позже перешла в full-stack (Node.js + Strapi + MongoDB): настраивала окружения, CI/CD на AWS, деплой на тест и прод.',
+        'Реализовала карточки техники, каталог с фильтрами, лендинг и дашборды для админов (оптимизация MongoDB-запросов).',
+        'Одной из ключевых фич стал реалтайм-аукцион (по аналогии с eBay). Разработала детальное техническое задание со статусами, таймерами и логикой переходов. Реализовала frontend-часть с live-обновлениями и взаимодействием с бэкендом.',
       ],
       en: [
-        'Built the frontend from scratch: Next.js, TypeScript, Styled Components, GraphQL (Apollo). Later went full-stack with Node.js, Strapi, MongoDB, CI/CD on AWS.',
-        'Designed and built an eBay-style real-time auction: a spec with statuses, timers and transitions, and a frontend with live updates.',
+        'We built a construction equipment marketplace for a foreign client.',
+        'Set up and developed the frontend from scratch with Next.js, TypeScript, Styled Components and GraphQL (Apollo).',
+        'Later moved to full-stack (Node.js + Strapi + MongoDB): set up environments, CI/CD on AWS, deployments to test and production.',
+        'Implemented equipment cards, a catalog with filters, a landing page and admin dashboards (optimizing MongoDB queries).',
+        'One of the key features was a real-time auction (similar to eBay). I wrote a detailed technical specification with statuses, timers and transition logic, and implemented the frontend with live updates and backend interaction.',
       ],
     },
   },
   {
     role: 'Junior / Middle Frontend Developer',
     company: { ru: 'First Line Software', en: 'First Line Software' },
-    project: { ru: 'Гипермаркеты «Лента»', en: 'Lenta hypermarkets' },
+    project: { ru: 'Сеть гипермаркетов «Лента»', en: 'Lenta hypermarket chain' },
     period: { ru: 'август 2018 — июль 2020', en: 'Aug 2018 — Jul 2020' },
     points: {
-      ru: ['Сайт крупного ритейлера: каталог, фильтры, карточка товара, корзина (с поддержкой IE11). Выросла до старшего разработчика на проекте, курировала новичков и проводила code review, мигрировала проект на Preact с хуками.'],
-      en: ['E-commerce site of a major retailer: catalog, filters, product page, cart (with IE11 support). Grew to senior on the project, mentored juniors and did code review, migrated to Preact with hooks.'],
+      ru: [
+        'Работала над сайтом крупного ритейлера. Выросла с junior до старшего разработчика на проекте.',
+        'Курировала начинающих фронтендеров, проводила code review. Мигрировала проект на новую версию Preact с поддержкой хуков.',
+        'Основной фокус — frontend: каталог, фильтры, карточка товара, списки, корзина (поддержка IE11).',
+        'Работала в полной продуктовой команде (PM, QA, backend, дизайн).',
+      ],
+      en: [
+        'Worked on the website of a major retailer. Grew from junior to senior developer on the project.',
+        'Mentored junior frontend developers and did code review. Migrated the project to a new version of Preact with hooks support.',
+        'Main focus — frontend: catalog, filters, product page, lists, cart (IE11 support).',
+        'Worked in a full product team (PM, QA, backend, design).',
+      ],
     },
   },
   {
@@ -215,8 +247,14 @@ export const jobs: Job[] = [
     project: { ru: 'Служба краудсорсинговой доставки', en: 'Crowdsourced delivery service' },
     period: { ru: 'декабрь 2017 — июль 2018', en: 'Dec 2017 — Jul 2018' },
     points: {
-      ru: ['PHP (Yii 1) и jQuery, затем редизайн личного кабинета на Vue.js 2 и Bootstrap 4 — от макетов до реализации.'],
-      en: ['PHP (Yii 1) and jQuery, then redesigned the user dashboard with Vue.js 2 and Bootstrap 4 — from mockups to implementation.'],
+      ru: [
+        'Начала работать во второй половине 3 курса. Проект был реализован на PHP (Yii 1) и jQuery. Сначала занималась исправлением ошибок и добавлением функциональности, позже — редизайном личного кабинета: подготовила макеты, затем реализовала их с использованием Vue.js 2 и Bootstrap 4.',
+        'В процессе окончательно перешла с full-stack на frontend.',
+      ],
+      en: [
+        'Started working in the second half of my third year at university. The project was built with PHP (Yii 1) and jQuery. At first I fixed bugs and added functionality, later redesigned the user dashboard: prepared the mockups and then implemented them with Vue.js 2 and Bootstrap 4.',
+        'Along the way I fully switched from full-stack to frontend.',
+      ],
     },
   },
 ];
