@@ -39,19 +39,13 @@ export const about: Record<Lang, string[]> = {
 
 export const beyondWork: Record<Lang, { text: string; link?: { href: string; label: string } }[]> = {
   ru: [
-    {
-      text: 'читала лекцию «Инфраструктура» (часть 2) в Школе разработки интерфейсов Яндекса в 2026 году;',
-      link: { href: 'https://www.youtube.com/watch?v=oUQauacFpBY', label: 'видео' },
-    },
+    { text: 'читала лекцию «Инфраструктура» (часть 2) в Школе разработки интерфейсов Яндекса в 2026 году;' },
     { text: 'преподавала школьникам основы программирования;' },
     { text: 'совместно с коллегой запустила авторский мини-курс по React и фронтенду;' },
     { text: 'в рамках него самостоятельно подготовила и провела 4 из 8 лекций, а также практические задания.' },
   ],
   en: [
-    {
-      text: 'gave the “Infrastructure” lecture (part 2) at the Yandex School of Interface Development in 2026;',
-      link: { href: 'https://www.youtube.com/watch?v=oUQauacFpBY', label: 'video, in Russian' },
-    },
+    { text: 'gave the “Infrastructure” lecture (part 2) at the Yandex School of Interface Development in 2026;' },
     { text: 'taught programming basics to school students;' },
     { text: 'together with a colleague, launched my own short course on React and frontend;' },
     { text: 'as part of it, prepared and delivered 4 of the 8 lectures on my own, along with the practical assignments.' },
