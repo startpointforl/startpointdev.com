@@ -33,6 +33,8 @@ const articles = defineCollection({
     // Своя обложка для превью (путь от /public), иначе сгенерируется автоматически
     cover: z.string().optional(),
     draft: z.boolean().default(false),
+    // Оригинал в Телеграфе (для перенесённых статей)
+    telegraph: z.string().url().optional(),
   }).refine((d) => !d.series === !d.part, { message: 'series и part задаются вместе' }),
 });
 
