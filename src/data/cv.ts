@@ -132,6 +132,7 @@ export const jobs: Job[] = [
         'Yandex Contest is one of the key platforms of Yandex’s educational activities and is also part of hiring processes (Summer Schools, One Day Offer, etc.).',
       ],
     },
+    stack: ['TypeScript', 'React', 'Redux Toolkit', 'Vite', 'pnpm', 'Testplane', 'i-bem'],
   },
   {
     role: 'Middle / Senior Frontend Developer',
@@ -152,6 +153,7 @@ export const jobs: Job[] = [
         'Full-stack development: Next.js + NestJS + MongoDB. Implemented simple database migrations and business logic, added cron tasks, set up and improved CI/CD.',
       ],
     },
+    stack: ['TypeScript', 'React', 'Next.js', 'NestJS', 'MongoDB', 'Effector'],
   },
   {
     role: 'Team Lead',
@@ -174,6 +176,7 @@ export const jobs: Job[] = [
         'Worked with CI and covered code with automated tests (e2e, screenshot).',
       ],
     },
+    stack: ['TypeScript', 'React', 'Next.js', 'NestJS', 'MongoDB', 'Effector', 'i-bem', 'Testplane'],
   },
   {
     role: 'Frontend Developer',
@@ -192,6 +195,7 @@ export const jobs: Job[] = [
         'Also worked with legacy code (i-bem, fist) despite the lack of expertise in the team.',
       ],
     },
+    stack: ['TypeScript', 'React', 'Next.js', 'Effector', 'NestJS', 'Express', 'Docker', 'i-bem', 'fist'],
   },
   {
     role: 'Frontend Developer',
@@ -214,6 +218,7 @@ export const jobs: Job[] = [
         'One of the key features was a real-time auction (similar to eBay). I wrote a detailed technical specification with statuses, timers and transition logic, and implemented the frontend with live updates and backend interaction.',
       ],
     },
+    stack: ['TypeScript', 'React', 'Next.js', 'Styled Components', 'Apollo GraphQL', 'Node.js', 'Strapi', 'MongoDB', 'Stripe', 'Elasticsearch', 'AWS'],
   },
   {
     role: 'Junior / Middle Frontend Developer',
@@ -234,6 +239,7 @@ export const jobs: Job[] = [
         'Worked in a full product team (PM, QA, backend, design).',
       ],
     },
+    stack: ['Preact (class components, hooks)', 'Stylus', 'Razor (C#)', 'GTM'],
   },
   {
     role: 'Junior Full-stack Developer',
@@ -250,5 +256,6 @@ export const jobs: Job[] = [
         'Along the way I fully switched from full-stack to frontend.',
       ],
     },
+    stack: ['PHP (Yii 1)', 'jQuery', 'Vue.js 2', 'Bootstrap 4'],
   },
 ];
