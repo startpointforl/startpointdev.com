@@ -102,7 +102,64 @@ const jsonLd = graph(
   </article>
 </Base>
 
+<!-- Картинки в статье открываются по клику в полном размере -->
+<div class="zoom" hidden role="dialog" aria-modal="true" aria-label="Картинка в полном размере">
+  <img alt="" />
+</div>
+
+<script>
+  const zoom = document.querySelector<HTMLDivElement>('.zoom')!;
+  const zoomImg = zoom.querySelector('img')!;
+
+  // Самая большая версия из srcset — это картинка в исходном размере
+  const largest = (img: HTMLImageElement) => {
+    const candidates = (img.getAttribute('srcset') || '')
+      .split(',')
+      .map((c) => c.trim().split(/\s+/))
+      .filter(([url, w]) => url && w?.endsWith('w'))
+      .map(([url, w]) => ({ url, w: parseInt(w) }));
+    return candidates.sort((a, b) => b.w - a.w)[0]?.url || img.currentSrc || img.src;
+  };
+
+  const close = () => {
+    zoom.hidden = true;
+    document.body.style.overflow = '';
+  };
+
+  document.querySelectorAll<HTMLImageElement>('.article-body figure img').forEach((img) => {
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+    img.title = 'Открыть в полном размере';
+    const open = () => {
+      zoomImg.removeAttribute('style');
+      zoomImg.onload = () => {
+        // пиксель в пиксель с учётом плотности экрана: скриншоты с ретины не раздуваются вдвое
+        zoomImg.style.width = `${Math.round(zoomImg.naturalWidth / window.devicePixelRatio)}px`;
+      };
+      zoomImg.src = largest(img);
+      zoomImg.alt = img.alt;
+      zoom.hidden = false;
+      zoom.scrollTo(0, 0);
+      document.body.style.overflow = 'hidden';
+    };
+    img.addEventListener('click', open);
+    img.addEventListener('keydown', (e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), open()));
+  });
+
+  zoom.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && !zoom.hidden && close());
+</script>
+
 <style>
+  :global(.article-body figure img) { cursor: zoom-in; }
+  .zoom {
+    position: fixed; inset: 0; z-index: 100; overflow: auto; cursor: zoom-out;
+    display: grid; place-items: safe center; padding: 2rem;
+    background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(2px);
+  }
+  .zoom[hidden] { display: none; }
+  /* Картинка в исходном размере; если шире экрана — прокручивается */
+  .zoom img { max-width: none; height: auto; border-radius: 4px; box-shadow: 0 8px 40px rgb(0 0 0 / 0.25); }
   .head { padding: 1.5rem 0 2rem; }
   .kicker { font: 400 14px var(--mono); color: var(--muted); margin: 0 0 0.8rem; }
   .kicker a { color: var(--accent); }
