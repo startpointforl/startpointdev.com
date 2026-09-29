@@ -86,7 +86,8 @@ class Converter:
         out = []
         for n in nodes or []:
             if isinstance(n, str):
-                out.append(esc(n))
+                # остатки нераспознанного Markdown в оригинале («****», «**текст»)
+                out.append(esc(re.sub(r'\*{2,}', '', n)))
                 continue
             tag, ch = n.get('tag'), n.get('children')
             if tag in ('strong', 'b'):
@@ -260,7 +261,11 @@ def strip_series_nav(content: list, removed: list) -> list:
             while j < len(out) and is_link_only(out[j]):
                 j += 1
             if j > i + 1:
-                start = i - 1 if i > 0 and isinstance(out[i - 1], dict) and out[i - 1].get('tag') == 'hr' else i
+                is_hr = lambda k: 0 <= k < len(out) and isinstance(out[k], dict) and out[k].get('tag') == 'hr'
+                start = i - 1 if is_hr(i - 1) else i
+                # навигация в самом начале статьи: разделитель стоит после неё
+                if start == 0 and is_hr(j):
+                    j += 1
                 removed.append(' | '.join(plain(n).strip() for n in out[start:j] if plain(n).strip()))
                 del out[start:j]
                 i = start
