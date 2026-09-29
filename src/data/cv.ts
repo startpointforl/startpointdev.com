@@ -61,8 +61,8 @@ export const skills: { title: L10n; items: Record<Lang, string[]> }[] = [
   {
     title: { ru: 'Языки и технологии', en: 'Languages' },
     items: {
-      ru: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'Python, Go, PHP и Kotlin — базово'],
-      en: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'Python, Go, PHP and Kotlin (basic)'],
+      ru: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'Python, Go, PHP, Java и Kotlin — базово'],
+      en: ['JavaScript', 'TypeScript', 'Node.js', 'HTML', 'CSS', 'Python, Go, PHP, Java and Kotlin (basic)'],
     },
   },
   {
@@ -132,7 +132,7 @@ export const jobs: Job[] = [
         'Yandex Contest is one of the key platforms of Yandex’s educational activities and is also part of hiring processes (Summer Schools, One Day Offer, etc.).',
       ],
     },
-    stack: ['TypeScript', 'React', 'Redux Toolkit', 'Vite', 'pnpm', 'Testplane', 'i-bem'],
+    stack: ['TypeScript', 'React', 'Redux Toolkit', 'Vite', 'pnpm', 'Testplane', 'i-bem', 'Java', 'Kotlin'],
   },
   {
     role: 'Middle / Senior Frontend Developer',
