@@ -1,4 +1,4 @@
 ---
-title: "Pnpm"
-description: "Почему вообще pnpm и чем он лучше npm, а также особенности работы с peer dependencies."
+title: "Разбираемся с pnpm"
+description: "Чем pnpm лучше npm и как в нём устроена работа с peer dependencies."
 ---
