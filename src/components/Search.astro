@@ -1,0 +1,101 @@
+---
+// Поиск по статьям на Pagefind: индекс строится после сборки (npm run build),
+// в браузере подгружается маленькими частями только при вводе запроса.
+// Пока идёт поиск, основной список статей (#catalog) скрывается.
+---
+
+<div class="search" role="search">
+  <label class="visually-hidden" for="search-input">Поиск по статьям</label>
+  <input id="search-input" type="search" placeholder="поиск по статьям" autocomplete="off" spellcheck="false" />
+  <p class="status mono" aria-live="polite"></p>
+  <ol class="results"></ol>
+</div>
+
+<script is:inline>
+  // is:inline: Vite не должен трогать динамический import() индекса Pagefind.
+  // Запускаемся после разбора страницы: список статей (#catalog) идёт ниже этого скрипта.
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.querySelector('#search-input');
+    const status = document.querySelector('.search .status');
+    const list = document.querySelector('.search .results');
+    const catalog = document.querySelector('#catalog');
+    let pagefind = null;
+
+    const plural = (n) =>
+      n % 10 === 1 && n % 100 !== 11 ? 'статья' : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? 'статьи' : 'статей';
+
+    async function load() {
+      if (!pagefind) {
+        pagefind = await import('/pagefind/pagefind.js');
+        await pagefind.init();
+      }
+      return pagefind;
+    }
+
+    function render(results, query) {
+      list.replaceChildren(
+        ...results.map((r) => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = r.url;
+          a.className = 't';
+          a.textContent = r.meta.title || r.url;
+          const p = document.createElement('p');
+          p.className = 'excerpt';
+          p.innerHTML = r.excerpt; // текст статьи с <mark> вокруг совпадений
+          li.append(a, p);
+          return li;
+        }),
+      );
+      status.textContent = results.length
+        ? `${results.length} ${plural(results.length)}`
+        : `по запросу «${query}» ничего не нашлось`;
+    }
+
+    input.addEventListener('input', async () => {
+      const query = input.value.trim();
+      if (!query) {
+        list.replaceChildren();
+        status.textContent = '';
+        catalog?.removeAttribute('hidden');
+        return;
+      }
+      catalog?.setAttribute('hidden', '');
+      try {
+        const pf = await load();
+        const search = await pf.debouncedSearch(query, {}, 200);
+        if (!search || input.value.trim() !== query) return; // уже ввели более новый запрос
+        render(await Promise.all(search.results.slice(0, 20).map((r) => r.data())), query);
+      } catch (e) {
+        console.error(e);
+        status.textContent = 'поиск пока недоступен';
+      }
+    });
+
+    // Поиск можно открыть ссылкой: /blog/?q=event+loop
+    const q = new URLSearchParams(location.search).get('q');
+    if (q) {
+      input.value = q;
+      input.dispatchEvent(new Event('input'));
+    }
+  });
+</script>
+
+<style>
+  .search { margin: 1.75rem 0 0.5rem; }
+  input {
+    width: 100%; font: 400 16px var(--mono); color: var(--text);
+    padding: 0.7rem 0.9rem; border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+  }
+  input::placeholder { color: var(--muted); }
+  input:focus { outline: none; border-color: var(--accent); }
+  .status { font-size: 13px; color: var(--muted); margin: 0.75rem 0 0; min-height: 1em; }
+  .results { list-style: none; margin: 0.5rem 0 0; padding: 0; }
+  /* элементы выдачи создаются скриптом, поэтому стили глобальные */
+  :global(.search .results li) { padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
+  :global(.search .results li:last-child) { border-bottom: 0; }
+  :global(.search .results .t) { font: 400 1.1rem/1.4 var(--mono); }
+  :global(.search .results .excerpt) { margin: 0.35rem 0 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+  :global(.search .results mark) { background: none; color: var(--text); font-weight: 700; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>

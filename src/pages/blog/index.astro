@@ -1,6 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ArticleList from '../../components/ArticleList.astro';
+import Search from '../../components/Search.astro';
+import { SITE } from '../../data/site';
 import { getArticles, getSeriesList, getStandalone } from '../../lib/content';
 
 const articles = await getArticles();
@@ -13,7 +15,14 @@ const standalone = getStandalone(articles);
     <header class="page-head">
       <h1>Статьи</h1>
       <p>Разборы того, как устроены Node.js, V8, libuv, Next.js и браузеры.</p>
+      <p class="channel">
+        Больше материала всегда можно найти в моём Telegram-канале{' '}
+        <a class="link" href={SITE.links.telegram} target="_blank" rel="noopener">{SITE.telegramChannel}</a>
+      </p>
+      <Search />
     </header>
+
+    <div id="catalog">
 
     {series.map(({ series: s, parts }) => (
       <section class="series">
@@ -28,10 +37,13 @@ const standalone = getStandalone(articles);
         <ArticleList articles={standalone} />
       </section>
     )}
+    </div>
   </div>
 </Base>
 
 <style>
+  .channel { margin-top: 0.4rem !important; }
+  .channel a { color: var(--text); }
   .section-head .name { color: var(--text); font-size: 1rem; }
   .section-head .name:hover { color: var(--accent); }
 </style>

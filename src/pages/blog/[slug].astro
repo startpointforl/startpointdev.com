@@ -56,19 +56,19 @@ const jsonLd = graph(
 <Base title={title} description={description} lang={lang} type="article" ogImage={ogImage}
   publishedTime={date} modifiedTime={updated} tags={tags} jsonLd={jsonLd}>
   <!-- Разметка рассчитана на шаблон Instant View: article h1, .author, time, .article-body -->
-  <article class="narrow">
+  <article class="narrow" data-pagefind-body>
     <header class="head">
       {nav && (
-        <p class="kicker">
+        <p class="kicker" data-pagefind-ignore>
           <a href={`/series/${nav.series.id}/`}>{nav.series.data.title}</a> · часть {article.data.part} из {nav.parts.length}
         </p>
       )}
-      <h1>{title}</h1>
-      <p class="meta">
+      <h1 data-pagefind-meta="title">{title}</h1>
+      <p class="meta" data-pagefind-ignore>
         <span class="author">{SITE.author[lang]}</span> · <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
       </p>
       {nav && nav.parts.length > 1 && (
-        <details class="toc">
+        <details class="toc" data-pagefind-ignore>
           <summary>оглавление цикла</summary>
           <ol>
             {nav.parts.map((p) => (
@@ -86,7 +86,7 @@ const jsonLd = graph(
       <Content />
     </div>
 
-    <footer class="foot">
+    <footer class="foot" data-pagefind-ignore>
       {nav && (nav.prev || nav.next) && (
         <nav class="pager" aria-label="Навигация по циклу">
           {nav.prev ? (
