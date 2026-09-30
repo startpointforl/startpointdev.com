@@ -11,6 +11,7 @@
 """
 import argparse
 import json
+import time
 import re
 import urllib.parse
 import urllib.request
@@ -94,12 +95,14 @@ class Converter:
                 out.append(esc(re.sub(r'\*{2,}', '', n)))
                 continue
             tag, ch = n.get('tag'), n.get('children')
-            if tag in ('strong', 'b'):
-                inner = self.inline(ch).strip()
-                out.append(f'**{inner}**' if inner else '')
-            elif tag in ('em', 'i'):
-                inner = self.inline(ch).strip()
-                out.append(f'*{inner}*' if inner else '')
+            if tag in ('strong', 'b', 'em', 'i'):
+                mark = '**' if tag in ('strong', 'b') else '*'
+                raw = self.inline(ch)
+                inner = raw.strip()
+                # пробелы по краям выносим за маркеры, иначе «*текст *» не распознаётся как выделение
+                lead = raw[:len(raw) - len(raw.lstrip())]
+                trail = raw[len(raw.rstrip()):]
+                out.append(f'{lead}{mark}{inner}{mark}{trail}' if inner else raw)
             elif tag == 'code':
                 raw = self.text(ch)
                 fence = '``' if '`' in raw else '`'
@@ -217,9 +220,17 @@ class Converter:
         url = src if src.startswith('http') else 'https://telegra.ph' + src
         self.images += 1
         req = urllib.request.Request(url, headers=UA)
-        with urllib.request.urlopen(req, timeout=60) as r:
-            data = r.read()
-            ctype = r.headers.get('Content-Type', '')
+        for attempt in range(5):
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    data = r.read()
+                    ctype = r.headers.get('Content-Type', '')
+                break
+            except Exception as e:  # хостинги картинок иногда отвечают 5xx
+                if attempt == 4:
+                    raise
+                print(f'  … {url}: {e}, повтор через {2 ** (attempt + 1)} с')
+                time.sleep(2 ** (attempt + 1))
         ext = {'image/png': 'png', 'image/jpeg': 'jpg', 'image/gif': 'gif', 'image/webp': 'webp'}.get(ctype.split(';')[0])
         if not ext:
             ext = Path(urllib.parse.urlparse(url).path).suffix.lstrip('.').lower() or 'jpg'
