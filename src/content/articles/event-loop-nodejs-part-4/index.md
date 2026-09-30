@@ -209,7 +209,7 @@ res.setHeader('Connection', 'close');
 
 Пример:
 
-```
+```js
 http.createServer((req, res) => {
   if (req.url === '/crash') {
     throw new Error('Something went wrong');

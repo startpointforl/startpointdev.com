@@ -56,20 +56,24 @@ def esc(text: str) -> str:
 
 def detect_lang(code: str) -> str:
     c = code.strip()
-    if re.search(r'^\s*(\$ |npm |npx |pnpm |yarn |node |cd |curl |brew |git |sudo |export |ls\b|cat )', c, re.M):
-        return 'bash'
-    if re.search(r'#include|std::|::[A-Za-z_]+\(|\bNapi::|\bv8::|\buv_[a-z_]+\(', c):
+    if re.search(r'#include|std::|\bNapi::|\bv8::|\buv_[a-z_]+\(|\bnapi_[a-z_]+\(', c):
         return 'cpp'
-    if re.match(r'^[\[{]', c) and re.search(r'"\s*:', c) and not re.search(r'\b(const|let|function|=>)\b', c):
+    js = re.search(r'\bimport .+ from |\brequire\(|^\s*(const|let|var|function|class|async function|export (default |const |function |class ))'
+                   r'|=>|console\.\w+\(|\.forEach\(|\buse(State|Effect|LayoutEffect|Ref|Memo)\b', c, re.M)
+    ts = re.search(r'\binterface \w+|\btype \w+ =|\w\??:\s*(string|number|boolean|void|any|unknown)\b|\bas const\b', c)
+    jsx = re.search(r'return \(?\s*<[A-Za-z]|<[A-Z]\w*[\s/>]|</\w+>', c)
+    if js or ts:
+        if ts:
+            return 'tsx' if jsx else 'ts'
+        return 'jsx' if jsx else 'js'
+    if re.search(r'^\s*(\$ |npm |npx |pnpm |yarn |node |cd |curl |brew |git |sudo |export [A-Z_]+=|ls\b|cat |mkdir |docker )', c, re.M):
+        return 'bash'
+    if re.match(r'^[\[{]', c) and re.search(r'"\s*:', c):
         return 'json'
     if re.match(r'^<(!doctype|html|div|body|head|script|template|span|p)\b', c, re.I):
         return 'html'
-    if re.search(r'^\s*[.#]?[a-z-]+\s*\{[^}]*:[^}]*;', c, re.M | re.I) and not re.search(r'\b(const|let|function)\b', c):
+    if re.search(r'^\s*[.#]?[a-z-]+\s*\{[^}]*:[^}]*;', c, re.M | re.I):
         return 'css'
-    if re.search(r'\binterface \w+|\btype \w+ =|:\s*(string|number|boolean|void)\b|<[A-Z]\w*>\(', c):
-        return 'ts'
-    if re.search(r'^\s*(import|export|const|let|var|function|class|async|await|console\.|setTimeout|process\.|require\(|\w+\(.*\);?$)', c, re.M):
-        return 'js'
     return ''
 
 
@@ -135,7 +139,7 @@ class Converter:
 
         def flush():
             if buf:
-                t = self.inline(buf).strip()
+                t = re.sub(r'^(\\\n|\\)+|(\\\n|\\)+$', '', self.inline(buf).strip()).strip()
                 if t:
                     out.append(t)
                 buf.clear()
@@ -148,6 +152,8 @@ class Converter:
             tag, ch = n['tag'], n.get('children')
             if tag == 'p':
                 t = self.inline(ch).strip()
+                # переносы строк по краям абзаца и «пустые» абзацы из одного <br> не нужны
+                t = re.sub(r'^(\\\n|\\)+|(\\\n|\\)+$', '', t).strip()
                 # Абзац, похожий на Markdown-разметку, не должен стать заголовком/цитатой/списком
                 t = re.sub(r'^(#|>|[-+] )', r'\\\1', t)
                 if t:
