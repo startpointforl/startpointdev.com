@@ -2,8 +2,19 @@ import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 type Article = CollectionEntry<'articles'>;
 
-export async function getArticles() {
-  const all = await getCollection('articles', ({ data }) => import.meta.env.DEV || !data.draft);
+const buildTime = new Date();
+
+/** Статья с датой в будущем: уже открывается по прямой ссылке, но ещё не видна в списках, поиске и RSS.
+ *  В дату публикации её «открывает» ежедневная пересборка сайта (.github/workflows/deploy.yml). */
+export const isScheduled = (article: Article) => article.data.date > buildTime;
+
+/** Опубликованные статьи; с withScheduled — ещё и запланированные (нужны только для их собственных страниц).
+ *  В режиме разработки видно всё, включая черновики. */
+export async function getArticles({ withScheduled = false } = {}) {
+  const all = await getCollection(
+    'articles',
+    (a) => import.meta.env.DEV || (!a.data.draft && (withScheduled || !isScheduled(a))),
+  );
   return all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 

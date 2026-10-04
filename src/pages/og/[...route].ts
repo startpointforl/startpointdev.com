@@ -3,7 +3,7 @@ import { OGImageRoute } from 'astro-og-canvas';
 import { getArticles } from '../../lib/content';
 import { SITE } from '../../data/site';
 
-const articles = await getArticles();
+const articles = await getArticles({ withScheduled: true });
 const pages: Record<string, { title: string; description: string }> = Object.fromEntries(
   articles.map(({ id, data }) => [id, { title: data.title, description: data.description }]),
 );

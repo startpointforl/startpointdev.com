@@ -3,6 +3,10 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # Каждое утро: статьи, у которых наступила дата, появляются в списках, поиске и RSS.
+  # 04:00 UTC = 6:00 по Белграду летом, 5:00 зимой. GitHub может запустить с опозданием до ~20 минут.
+  schedule:
+    - cron: '0 4 * * *'
   workflow_dispatch:
 
 permissions:

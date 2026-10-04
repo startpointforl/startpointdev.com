@@ -2,26 +2,32 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ShareButton from '../../components/ShareButton.astro';
-import { getArticles, getSeriesNav } from '../../lib/content';
+import { getArticles, getSeriesNav, isScheduled } from '../../lib/content';
 import { SITE } from '../../data/site';
 import { formatDate } from '../../i18n/ui';
 import { breadcrumbsLd, graph } from '../../lib/seo';
 
 export async function getStaticPaths() {
-  const articles = await getArticles();
+  const all = await getArticles({ withScheduled: true });
+  const published = all.filter((a) => !isScheduled(a));
   return Promise.all(
-    articles.map(async (article) => ({
-      params: { slug: article.id },
-      props: { article, nav: await getSeriesNav(article, articles) },
-    })),
+    all.map(async (article) => {
+      // Запланированная статья видит в цикле опубликованные части и себя; другим статьям она пока не видна
+      const scheduled = !published.includes(article);
+      const nav = await getSeriesNav(article, scheduled ? [...published, article] : published);
+      return { params: { slug: article.id }, props: { article, nav, scheduled } };
+    }),
   );
 }
 
 interface Props {
   article: CollectionEntry<'articles'>;
   nav: Awaited<ReturnType<typeof getSeriesNav>>;
+  scheduled: boolean;
 }
-const { article, nav } = Astro.props;
+const { article, nav, scheduled } = Astro.props;
+// Страница цикла появляется вместе с первой опубликованной частью
+const seriesLive = nav?.parts.some((p) => p.id !== article.id || !scheduled);
 const { Content } = await render(article);
 const { title, description, date, updated, tags, cover, lang } = article.data;
 const ogImage = cover ?? `/og/${article.id}.png`;
@@ -54,13 +60,13 @@ const jsonLd = graph(
 ---
 
 <Base title={title} description={description} lang={lang} type="article" ogImage={ogImage}
-  publishedTime={date} modifiedTime={updated} tags={tags} jsonLd={jsonLd}>
+  publishedTime={date} modifiedTime={updated} tags={tags} jsonLd={jsonLd} noindex={scheduled}>
   <!-- Разметка рассчитана на шаблон Instant View: article h1, .author, time, .article-body -->
-  <article class="narrow" data-pagefind-body>
+  <article class="narrow" data-pagefind-body={!scheduled || undefined}>
     <header class="head">
       {nav && (
         <p class="kicker" data-pagefind-ignore>
-          <a href={`/series/${nav.series.id}/`}>{nav.series.data.title}</a> · часть {article.data.part} из {nav.parts.length}
+          {seriesLive ? <a href={`/series/${nav.series.id}/`}>{nav.series.data.title}</a> : nav.series.data.title} · часть {article.data.part} из {nav.parts.length}
         </p>
       )}
       <h1 data-pagefind-meta="title">{title}</h1>
