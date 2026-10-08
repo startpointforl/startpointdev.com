@@ -33,12 +33,14 @@ export default defineConfig({
   ],
   // Шрифты Fontsource: скачиваются при сборке и раздаются с нашего домена, только кириллица и латиница.
   // Пока PT-шрифты грузятся, текст показывается системным шрифтом с подогнанными метриками, поэтому
-  // ничего не «прыгает». Для PT Mono заглушку считает Astro, для PT Sans/Serif его расчёт врёт
+  // ничего не «прыгает». display: 'optional' — шрифт не подменяется на уже открытой странице: если он
+  // не успел загрузиться (~0,1 с, обычно успевает благодаря preload), страница остаётся на заглушке,
+  // а со следующей страницы шрифт берётся из кэша. Для PT Mono заглушку считает Astro, для PT Sans/Serif его расчёт врёт
   // (заглушка в 1,5 раза шире), поэтому они заданы вручную в global.css.
   fonts: [
-    { provider: fontsource, name: 'PT Mono', cssVariable: '--font-mono', weights: [400], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['monospace'] },
-    { provider: fontsource, name: 'PT Sans', cssVariable: '--font-sans', weights: [400, 700], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Sans Fallback', 'sans-serif'], optimizedFallbacks: false },
-    { provider: fontsource, name: 'PT Serif', cssVariable: '--font-serif', weights: [400, 700], styles: ['normal', 'italic'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Serif Fallback', 'serif'], optimizedFallbacks: false },
+    { provider: fontsource, name: 'PT Mono', cssVariable: '--font-mono', weights: [400], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['monospace'], display: 'optional' },
+    { provider: fontsource, name: 'PT Sans', cssVariable: '--font-sans', weights: [400, 700], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Sans Fallback', 'sans-serif'], optimizedFallbacks: false, display: 'optional' },
+    { provider: fontsource, name: 'PT Serif', cssVariable: '--font-serif', weights: [400, 700], styles: ['normal', 'italic'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Serif Fallback', 'serif'], optimizedFallbacks: false, display: 'optional' },
   ],
   i18n: {
     locales: ['ru', 'en'],

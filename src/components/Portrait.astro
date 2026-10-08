@@ -2,21 +2,34 @@
 // Фото автора: src/assets/photo-light.jpg для светлой темы и photo-dark.jpg для тёмной.
 // Если одного из файлов нет, в обеих темах показывается второй; если нет обоих — заглушка с инициалами.
 import { Image } from 'astro:assets';
+import path from 'node:path';
+import sharp from 'sharp';
 import type { Lang } from '../i18n/ui';
 import { SITE } from '../data/site';
 
 interface Props { lang: Lang; eager?: boolean }
 const { lang, eager = false } = Astro.props;
 const files = import.meta.glob<{ default: ImageMetadata }>('../assets/photo-{light,dark}.{jpg,jpeg,png,webp}', { eager: true });
-const pick = (name: string) => Object.entries(files).find(([path]) => path.includes(`photo-${name}.`))?.[1].default;
+const find = (name: string) => Object.entries(files).find(([file]) => file.includes(`photo-${name}.`));
+const pick = (name: string) => find(name)?.[1].default;
 const light = pick('light') ?? pick('dark');
 const dark = pick('dark') ?? light;
+
+// Крошечная размытая версия фото (~0,5 КБ прямо в HTML): видна сразу, пока грузится настоящее фото
+async function lqip(name: string) {
+  const entry = find(name) ?? find(name === 'light' ? 'dark' : 'light');
+  if (!entry) return undefined;
+  const file = path.join(process.cwd(), 'src/components', entry[0]);
+  const buf = await sharp(file).resize(20).webp({ quality: 50 }).toBuffer();
+  return `url(data:image/webp;base64,${buf.toString('base64')})`;
+}
+const lqipStyle = `--lqip-light: ${await lqip('light')}; --lqip-dark: ${await lqip('dark')}`;
 const alt = SITE.author[lang];
 const common = { alt, widths: [240, 480, 720], sizes: '(max-width: 640px) 11rem, 240px', loading: eager ? 'eager' : 'lazy' } as const;
 ---
 
 {light && dark ? (
-  <div class="portrait">
+  <div class="portrait" style={lqipStyle}>
     <Image src={light} {...common} class="img light" />
     {dark !== light && <Image src={dark} {...common} class="img dark" />}
   </div>
@@ -26,6 +39,15 @@ const common = { alt, widths: [240, 480, 720], sizes: '(max-width: 640px) 11rem,
 
 <style>
   .portrait { position: relative; aspect-ratio: 5 / 6; border-radius: 6px; overflow: hidden; }
+  /* Размытое превью под фотографией */
+  .portrait::before {
+    content: ''; position: absolute; inset: 0; transform: scale(1.15);
+    background: var(--lqip-light) 50% 20% / cover no-repeat; filter: blur(14px);
+  }
+  :global(:root[data-theme='dark']) .portrait::before { background-image: var(--lqip-dark); }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .portrait::before { background-image: var(--lqip-dark); }
+  }
   .img {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; object-position: 50% 20%; transition: opacity 0.6s ease;
