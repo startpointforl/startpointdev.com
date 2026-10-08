@@ -44,10 +44,12 @@ const talks = defineCollection({
     title: z.string(),
     titleEn: z.string().optional(),
     event: z.string(),
+    eventEn: z.string().optional(),
     date: z.coerce.date(),
     // Для старых докладов без точной даты
     dateLabel: z.string().optional(),
     city: z.string().optional(),
+    cityEn: z.string().optional(),
     format: z.enum(['offline', 'online', 'hybrid']),
     lang: z.enum(['ru', 'en']).default('ru'),
     video: z.string().url().optional(),

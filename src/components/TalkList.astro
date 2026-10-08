@@ -12,13 +12,15 @@ const now = Date.now();
   {talks.map(({ data: talk }) => {
     const title = lang === 'en' && talk.titleEn ? talk.titleEn : talk.title;
     const note = lang === 'en' ? talk.noteEn : talk.note;
-    const place = talk.format === 'online' ? tr('talks.online') : talk.format === 'hybrid' ? `${talk.city} + ${tr('talks.online')}` : talk.city;
+    const event = lang === 'en' && talk.eventEn ? talk.eventEn : talk.event;
+    const city = lang === 'en' && talk.cityEn ? talk.cityEn : talk.city;
+    const place = talk.format === 'online' ? tr('talks.online') : talk.format === 'hybrid' ? `${city} + ${tr('talks.online')}` : city;
     return (
       <li>
         <span class="d">{talk.dateLabel ?? formatIso(talk.date)}</span>
         <div>
           <div class="e">
-            {talk.event}{place && ` · ${place}`}
+            {event}{place && ` · ${place}`}
             {talk.date.valueOf() > now && <span class="badge">{tr('talks.upcoming')}</span>}
           </div>
           <div class="t">{title}</div>

@@ -7,6 +7,7 @@
   event: HolyJS 2026 Autumn
   date: 2026-10-23
   city: Санкт-Петербург
+  cityEn: Saint Petersburg
   format: offline
   page: https://holyjs.ru/talks/20011224-welcome-to-the-server-where-vulnerabilities-hide-in-next-js-app-router/
   abstract: >-
@@ -36,8 +37,10 @@
   title: "Ignition, Sparkplug, Maglev, TurboFan: как компилирует V8"
   titleEn: "Ignition, Sparkplug, Maglev, TurboFan: how V8 compiles"
   event: DUMP Санкт-Петербург
+  eventEn: DUMP Saint Petersburg
   date: 2026-02-13
   city: Санкт-Петербург
+  cityEn: Saint Petersburg
   format: offline
   video: https://youtu.be/jY7Af6zR40A
   abstract: >-
@@ -52,6 +55,7 @@
   event: FrontendConf 2025
   date: 2025-10-21
   city: Москва
+  cityEn: Moscow
   format: offline
   video: https://youtu.be/ZaoRJs5HD8k
   page: https://frontendconf.ru/moscow/2025/abstracts/15502
@@ -67,8 +71,10 @@
   title: "Не переписывай — обнови! Как вдохнуть жизнь в легаси"
   titleEn: "Don't rewrite — upgrade! Breathing new life into legacy"
   event: Яндекс Субботник
+  eventEn: Yandex Subbotnik
   date: 2025-07-26
   city: Минск
+  cityEn: Minsk
   format: offline
   video: https://youtu.be/a1qoD9jdJa0
   abstract: >-
