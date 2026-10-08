@@ -1,10 +1,14 @@
 # startpointdev.com
 
-Личный сайт: статьи, выступления, CV (RU/EN). [Astro](https://astro.build), деплой на GitHub Pages.
+Личный сайт: статьи, выступления, CV (RU/EN). [Astro](https://astro.build), деплой на GitLab Pages.
+
+Основной репозиторий — [gitlab.com/startpoint_forl/startpointdev.com](https://gitlab.com/startpoint_forl/startpointdev.com):
+оттуда сайт собирается и публикуется. GitHub — зеркало: локальный `git push` отправляет в оба места,
+но правки через веб-интерфейс GitHub на сайт не попадут — правь через GitLab.
 
 ## Опубликовать статью
 
-1. Создай `src/content/articles/<имя>.md` (можно прямо в веб-интерфейсе GitHub):
+1. Создай `src/content/articles/<имя>.md` (можно прямо в веб-интерфейсе GitLab):
 
    ```md
    ---
@@ -27,7 +31,7 @@
    part: 3                 # номер части
    ```
 
-2. Закоммить в `main` → GitHub Action соберёт и задеплоит сайт (~1 мин).
+2. Закоммить в `main` → GitLab CI соберёт и задеплоит сайт (~2–3 мин).
 3. На странице статьи нажми «Скопировать ссылку для Telegram».
 
 Статья с картинками — это папка: `src/content/articles/<имя>/index.md`, а картинки лежат рядом
@@ -42,9 +46,8 @@
   в Telegram (превью и Instant View подтянутся). Но её нет в списках, на главной, в цикле,
   в поиске, RSS и карте сайта, а поисковикам сказано её не индексировать.
 - Каждое утро сайт пересобирается сам, и статьи, у которых наступила дата, появляются везде.
-  Запуск стоит на 00:17 UTC (+ страховочный в 03:47), но GitHub выполняет расписание
-  с опозданием на несколько часов, так что рассчитывай на утро, а не на точное время.
-- Пересобрать раньше: Actions → Deploy → Run workflow.
+  Расписание — в GitLab: Build → Pipeline schedules (около 6:00 по Белграду).
+- Пересобрать раньше: Build → Pipeline schedules → ▶ (или Build → Pipelines → Run pipeline).
 
 ## Циклы статей
 
@@ -82,10 +85,14 @@ npm run build
 
 ## Первичная настройка хостинга
 
-1. Создать репозиторий на GitHub и запушить.
-2. Settings → Pages → Source: **GitHub Actions**.
-3. Settings → Pages → Custom domain: `startpointdev.com`, включить **Enforce HTTPS**.
-4. DNS у регистратора:
-   - `A` для `@`: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - `CNAME` для `www`: `<github-username>.github.io`
+Хостинг — GitLab Pages (сборка в [`.gitlab-ci.yml`](.gitlab-ci.yml)). До октября 2026 сайт жил на GitHub Pages,
+но GitHub так и не выпустил для домена HTTPS-сертификат.
+
+1. Публичный проект на GitLab; Settings → General → Visibility → Pages: **Everyone**.
+2. Deploy → Pages → New domain: `startpointdev.com` и `www.startpointdev.com`, Let's Encrypt включён.
+3. DNS у регистратора (GoDaddy):
+   - `A` для `@`: `35.185.44.232`, `AAAA` для `@`: `2600:1901:0:7b8a::`
+   - `CNAME` для `www`: `startpointdev.com`
+   - `TXT` `_gitlab-pages-verification-code` и `_gitlab-pages-verification-code.www` — коды из настроек домена в GitLab
+4. Build → Pipeline schedules: ежедневный запуск для отложенных статей.
 5. Instant View — см. [`instant-view/README.md`](instant-view/README.md).
