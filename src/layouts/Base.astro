@@ -100,6 +100,9 @@ const hreflang = altPath
         let theme = null;
         try { theme = localStorage.getItem('theme'); } catch {}
         if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+        // Контент скрыт, пока не загрузятся шрифты (см. скрипт в конце body); страховка — 2,5 с
+        document.documentElement.classList.add('reveal');
+        setTimeout(() => document.documentElement.classList.add('revealed'), 2500);
       })();
     </script>
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
@@ -111,5 +114,18 @@ const hreflang = altPath
       <slot />
     </main>
     <Footer lang={lang} />
+    <script is:inline>
+      // Появление страницы: ждём шрифты PT (кириллицу и латиницу), но не дольше секунды,
+      // и только потом показываем контент — сразу нужным шрифтом, без подмены
+      (() => {
+        const root = document.documentElement;
+        const css = getComputedStyle(root);
+        const family = (v) => css.getPropertyValue(v).split(',')[0].trim();
+        const vars = ['--font-mono', '--font-sans'].concat(document.querySelector('.prose') ? ['--font-serif'] : []);
+        const fonts = Promise.all(vars.map((v) => document.fonts.load(`400 1em ${family(v)}`, 'Аa').catch(() => {})));
+        const timeout = new Promise((resolve) => setTimeout(resolve, 1000));
+        Promise.race([fonts, timeout]).then(() => requestAnimationFrame(() => root.classList.add('revealed')));
+      })();
+    </script>
   </body>
 </html>

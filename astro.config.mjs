@@ -33,13 +33,12 @@ export default defineConfig({
   ],
   // Шрифты Fontsource: скачиваются при сборке и раздаются с нашего домена, только кириллица и латиница.
   // Пока PT-шрифты грузятся, текст показывается системным шрифтом с подогнанными метриками, поэтому
-  // ничего не «прыгает». display: 'block' — пока шрифт грузится (обычно доли секунды благодаря preload),
-  // текст не рисуется, а затем сразу появляется шрифтом PT, без подмены. 'optional' не подошёл:
-  // шрифт разбит на файлы по алфавитам, и в iOS Safari кириллица оставалась на заглушке, а латиница — на PT.
+  // ничего не «прыгает». Кроме того, страница показывается (с анимацией) только когда шрифты
+  // загрузились — см. скрипт в конце Base.astro; swap нужен на случай, если шрифт не успел за секунду.
   fonts: [
-    { provider: fontsource, name: 'PT Mono', cssVariable: '--font-mono', weights: [400], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['monospace'], display: 'block' },
-    { provider: fontsource, name: 'PT Sans', cssVariable: '--font-sans', weights: [400, 700], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Sans Fallback', 'sans-serif'], optimizedFallbacks: false, display: 'block' },
-    { provider: fontsource, name: 'PT Serif', cssVariable: '--font-serif', weights: [400, 700], styles: ['normal', 'italic'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Serif Fallback', 'serif'], optimizedFallbacks: false, display: 'block' },
+    { provider: fontsource, name: 'PT Mono', cssVariable: '--font-mono', weights: [400], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['monospace'], display: 'swap' },
+    { provider: fontsource, name: 'PT Sans', cssVariable: '--font-sans', weights: [400, 700], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Sans Fallback', 'sans-serif'], optimizedFallbacks: false, display: 'swap' },
+    { provider: fontsource, name: 'PT Serif', cssVariable: '--font-serif', weights: [400, 700], styles: ['normal', 'italic'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Serif Fallback', 'serif'], optimizedFallbacks: false, display: 'swap' },
   ],
   i18n: {
     locales: ['ru', 'en'],

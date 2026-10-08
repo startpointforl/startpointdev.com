@@ -76,6 +76,23 @@ body > main { flex: 1; }
   to { clip-path: polygon(0 0, 200% 0, 0 200%); }
 }
 
+/* Появление страницы: блоки выезжают снизу по очереди, когда загрузились шрифты.
+   Классы reveal/revealed ставит скрипт в Base.astro; без JS всё видно сразу.
+   Итоговое состояние — transform: none, чтобы не ломать position: fixed у кнопки «наверх» и зума. */
+html.reveal body > header, html.reveal main > *, html.reveal body > footer { opacity: 0; transform: translateY(18px); }
+html.revealed body > header, html.revealed main > *, html.revealed body > footer {
+  opacity: 1; transform: none;
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+html.revealed main > :nth-child(1) { transition-delay: 70ms; }
+html.revealed main > :nth-child(2) { transition-delay: 140ms; }
+html.revealed main > :nth-child(n + 3) { transition-delay: 210ms; }
+html.revealed body > footer { transition-delay: 280ms; }
+@media (prefers-reduced-motion: reduce) {
+  html.reveal body > header, html.reveal main > *, html.reveal body > footer { transform: none; }
+  html.revealed body > header, html.revealed main > *, html.revealed body > footer { transition: opacity 0.2s ease; transition-delay: 0s; }
+}
+
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--accent); }
 .link { border-bottom: 1px solid var(--accent); }
