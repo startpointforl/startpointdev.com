@@ -3,7 +3,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ShareButton from '../../components/ShareButton.astro';
 import { getArticles, getSeriesNav, isScheduled } from '../../lib/content';
-import { SITE } from '../../data/site';
+import { SITE, instantViewUrl } from '../../data/site';
 import { formatDate } from '../../i18n/ui';
 import { breadcrumbsLd, graph } from '../../lib/seo';
 
@@ -28,6 +28,8 @@ interface Props {
 const { article, nav, scheduled } = Astro.props;
 // Страница цикла появляется вместе с первой опубликованной частью
 const seriesLive = nav?.parts.some((p) => p.id !== article.id || !scheduled);
+// Ссылка на соседнюю часть, которая открывается сразу в Instant View
+const ivLink = (id: string) => instantViewUrl(new URL(`/blog/${id}/`, Astro.site).toString());
 const { Content } = await render(article);
 const { title, description, date, updated, tags, cover, lang } = article.data;
 const ogImage = cover ?? `/og/${article.id}.png`;
@@ -104,6 +106,15 @@ const jsonLd = graph(
         </nav>
       )}
       <div class="share"><ShareButton url={url} /></div>
+      <!-- Только для Instant View: на сайте скрыто, шаблон IV дописывает этот блок в конец статьи -->
+      {nav && (nav.prev || nav.next) && (
+        <div class="iv-series" hidden>
+          <hr />
+          <h3>Цикл «{nav.series.data.title}»</h3>
+          {nav.prev && <p><a href={ivLink(nav.prev.id)}>← Предыдущая часть: {nav.prev.data.title}</a></p>}
+          {nav.next && <p><a href={ivLink(nav.next.id)}>Следующая часть: {nav.next.data.title} →</a></p>}
+        </div>
+      )}
     </footer>
   </article>
 </Base>

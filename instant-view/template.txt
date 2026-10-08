@@ -12,3 +12,7 @@ description: //meta[@property="og:description"]/@content
 image_url: //meta[@property="og:image"]/@content
 
 body: //article//div[has-class("article-body")]
+
+# Навигация по циклу: скрытый на сайте блок .iv-series со ссылками на соседние части
+# (ссылки вида t.me/iv?url=…&rhash=…, чтобы открывались сразу в Instant View)
+@append_to(//article//div[has-class("article-body")]): //div[has-class("iv-series")]/*
