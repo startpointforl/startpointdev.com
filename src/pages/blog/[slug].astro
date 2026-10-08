@@ -108,6 +108,13 @@ const jsonLd = graph(
   </article>
 </Base>
 
+<!-- Кнопка «наверх»: появляется, когда статью прокрутили дальше полутора экранов -->
+<button class="to-top" type="button" aria-label="Наверх" title="Наверх">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</button>
+
 <!-- Картинки в статье открываются по клику в полном размере -->
 <div class="zoom" hidden role="dialog" aria-modal="true" aria-label="Картинка в полном размере">
   <img alt="" />
@@ -153,11 +160,33 @@ const jsonLd = graph(
   });
 
   zoom.addEventListener('click', close);
+
+  const toTop = document.querySelector<HTMLButtonElement>('.to-top')!;
+  const updateToTop = () => toTop.classList.toggle('visible', window.scrollY > window.innerHeight * 1.5);
+  window.addEventListener('scroll', updateToTop, { passive: true });
+  updateToTop();
+  toTop.addEventListener('click', () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
   document.addEventListener('keydown', (e) => e.key === 'Escape' && !zoom.hidden && close());
 </script>
 
 <style>
   :global(.article-body figure img) { cursor: zoom-in; }
+  .to-top {
+    position: fixed; z-index: 50;
+    right: max(16px, env(safe-area-inset-right)); bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px));
+    display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; cursor: pointer;
+    color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 50%;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.08);
+    /* скрытая кнопка не ловит клики и фокус */
+    opacity: 0; visibility: hidden; transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+  }
+  .to-top.visible { opacity: 1; visibility: visible; transform: none; }
+  .to-top:hover { color: var(--accent); border-color: var(--accent); }
+  @media (prefers-reduced-motion: reduce) { .to-top { transition: none; } }
   .zoom {
     position: fixed; inset: 0; z-index: 100; overflow: auto; cursor: zoom-out;
     display: grid; place-items: safe center; padding: 2rem;
