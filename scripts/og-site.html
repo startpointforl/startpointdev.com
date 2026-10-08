@@ -1,0 +1,38 @@
+<!doctype html>
+<!-- Картинка превью для ссылок на сайт (главная, CV, доклады, список статей).
+     Рендерится в PNG скриптом scripts/og-site.sh; ?lang=en — английская версия. -->
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: 'PT Mono'; src: url('../node_modules/@fontsource/pt-mono/files/pt-mono-cyrillic-400-normal.woff2'); }
+  @font-face { font-family: 'PT Mono'; src: url('../node_modules/@fontsource/pt-mono/files/pt-mono-latin-400-normal.woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: 'PT Sans'; src: url('../node_modules/@fontsource/pt-sans/files/pt-sans-cyrillic-400-normal.woff2'); }
+  @font-face { font-family: 'PT Sans'; src: url('../node_modules/@fontsource/pt-sans/files/pt-sans-latin-400-normal.woff2'); unicode-range: U+0000-00FF, U+2000-206F; }
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  /* фон карточки совпадает с фоном фотографии, поэтому фото стоит без рамки */
+  body { background: #dfdddf; color: #1f1f22; position: relative; font-family: 'PT Sans'; }
+  .photo { position: absolute; right: -30px; top: -40px; height: 720px; }
+  .fade { position: absolute; top: 0; bottom: 0; left: 560px; width: 200px; background: linear-gradient(90deg, #dfdddf, rgb(223 221 223 / 0)); }
+  .bar { position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: #4d7c52; }
+  .txt { position: absolute; left: 84px; top: 78px; width: 620px; }
+  .url { font: 400 26px 'PT Mono'; color: #4d7c52; }
+  h1 { font: 400 82px/1.08 'PT Mono'; margin-top: 64px; letter-spacing: -1px; }
+  .role { font-size: 30px; color: #3a3a40; margin-top: 34px; }
+  .topics { font-size: 26px; color: #6b6b73; margin-top: 12px; }
+</style>
+<img class="photo" src="../src/assets/photo-light.jpg" alt="">
+<div class="fade"></div>
+<div class="bar"></div>
+<div class="txt">
+  <div class="url">startpointdev.com</div>
+  <h1 id="name">Анастасия<br>Котова</h1>
+  <div class="role">Senior frontend / full-stack</div>
+  <div class="topics" id="topics">Node.js · V8 · браузеры · доклады · CV</div>
+</div>
+<script>
+  if (new URLSearchParams(location.search).get('lang') === 'en') {
+    document.documentElement.lang = 'en';
+    document.getElementById('name').innerHTML = 'Anastasia<br>Kotova';
+    document.getElementById('topics').textContent = 'Node.js · V8 · browsers · talks · CV';
+  }
+</script>

@@ -74,6 +74,7 @@ description: Одно предложение — показывается в к�
 | CV (RU + EN) | `src/data/cv.ts` |
 | Контакты, rhash для Instant View | `src/data/site.ts` |
 | Шаблон Instant View | `instant-view/` |
+| Превью ссылок на сайт (не статьи) | `scripts/og-site.html` → `sh scripts/og-site.sh` → `public/og-site*.jpg` |
 
 ## Локально
 

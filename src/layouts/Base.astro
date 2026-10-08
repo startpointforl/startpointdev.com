@@ -31,7 +31,7 @@ const {
   title,
   description = SITE.description[Astro.props.lang ?? 'ru'],
   lang = 'ru',
-  ogImage = '/og/default.png',
+  ogImage = Astro.props.lang === 'en' ? '/og-site-en.jpg' : '/og-site.jpg',
   type = 'website',
   publishedTime,
   modifiedTime,

@@ -1,13 +1,11 @@
 // Автогенерация картинок превью 1200×630 для статей: /og/<slug>.png
 import { OGImageRoute } from 'astro-og-canvas';
 import { getArticles } from '../../lib/content';
-import { SITE } from '../../data/site';
 
 const articles = await getArticles({ withScheduled: true });
 const pages: Record<string, { title: string; description: string }> = Object.fromEntries(
   articles.map(({ id, data }) => [id, { title: data.title, description: data.description }]),
 );
-pages.default = { title: SITE.author.ru, description: SITE.description.ru };
 
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: 'route',
