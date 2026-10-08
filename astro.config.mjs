@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeFigures from './src/lib/rehype-figures.mjs';
@@ -19,6 +19,8 @@ const scheduledPaths = new Set(
     .map(({ slug }) => `/blog/${slug}/`),
 );
 
+const fontsource = fontProviders.fontsource();
+
 export default defineConfig({
   site: 'https://startpointdev.com',
   trailingSlash: 'always',
@@ -28,6 +30,15 @@ export default defineConfig({
       // Связывает RU- и EN-версии страниц (главная, CV, доклады)
       i18n: { defaultLocale: 'ru', locales: { ru: 'ru-RU', en: 'en-US' } },
     }),
+  ],
+  // Шрифты Fontsource: скачиваются при сборке и раздаются с нашего домена, только кириллица и латиница.
+  // Пока PT-шрифты грузятся, текст показывается системным шрифтом с подогнанными метриками, поэтому
+  // ничего не «прыгает». Для PT Mono заглушку считает Astro, для PT Sans/Serif его расчёт врёт
+  // (заглушка в 1,5 раза шире), поэтому они заданы вручную в global.css.
+  fonts: [
+    { provider: fontsource, name: 'PT Mono', cssVariable: '--font-mono', weights: [400], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['monospace'] },
+    { provider: fontsource, name: 'PT Sans', cssVariable: '--font-sans', weights: [400, 700], styles: ['normal'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Sans Fallback', 'sans-serif'], optimizedFallbacks: false },
+    { provider: fontsource, name: 'PT Serif', cssVariable: '--font-serif', weights: [400, 700], styles: ['normal', 'italic'], subsets: ['cyrillic', 'latin'], fallbacks: ['PT Serif Fallback', 'serif'], optimizedFallbacks: false },
   ],
   i18n: {
     locales: ['ru', 'en'],

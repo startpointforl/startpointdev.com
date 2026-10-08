@@ -9,9 +9,10 @@
   --accent: #4d7c52;
   --code-bg: #f1f1ef;
 
-  --mono: 'PT Mono', ui-monospace, Menlo, monospace;
-  --sans: 'PT Sans', system-ui, sans-serif;
-  --serif: 'PT Serif', Georgia, serif;
+  /* --font-* задаёт Astro (fonts в astro.config.mjs): PT-шрифт + заглушка с подогнанными метриками */
+  --mono: var(--font-mono);
+  --sans: var(--font-sans);
+  --serif: var(--font-serif);
 
   --wide: 55rem;
   --text-w: 40rem;
@@ -41,6 +42,15 @@
   --code-bg: #1e1e21;
   color-scheme: dark;
 }
+
+/* Заглушки для PT Sans / PT Serif: системный шрифт, подогнанный по ширине и высоте строки,
+   чтобы при подгрузке настоящего шрифта текст не перескакивал. Коэффициенты измерены в браузере
+   на смешанном русско-английском тексте. */
+@font-face { font-family: 'PT Sans Fallback'; src: local('Arial'); font-weight: 400; size-adjust: 94.61%; ascent-override: 107.81%; descent-override: 29.6%; line-gap-override: 0%; }
+@font-face { font-family: 'PT Sans Fallback'; src: local('Arial Bold'), local('Arial-BoldMT'); font-weight: 700; size-adjust: 90.21%; ascent-override: 113.07%; descent-override: 31.04%; line-gap-override: 0%; }
+@font-face { font-family: 'PT Serif Fallback'; src: local('Georgia'); font-weight: 400; size-adjust: 100.15%; ascent-override: 103.84%; descent-override: 28.96%; line-gap-override: 0%; }
+@font-face { font-family: 'PT Serif Fallback'; src: local('Georgia Bold'), local('Georgia-Bold'); font-weight: 700; size-adjust: 93.92%; ascent-override: 110.73%; descent-override: 30.88%; line-gap-override: 0%; }
+@font-face { font-family: 'PT Serif Fallback'; src: local('Georgia Italic'), local('Georgia-Italic'); font-style: italic; size-adjust: 92.3%; ascent-override: 112.68%; descent-override: 31.42%; line-gap-override: 0%; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; font-synthesis-weight: none; }
