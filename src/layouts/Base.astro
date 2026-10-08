@@ -35,8 +35,9 @@ const {
 } = Astro.props;
 
 const author = SITE.author[lang];
-// Заранее грузим только основные начертания нужного алфавита; остальное браузер догрузит сам
-const preload = [{ weight: '400', style: 'normal', subset: lang === 'en' ? 'latin' : 'cyrillic' }];
+// Заранее грузим основное начертание (кириллица + латиница — в тексте они перемешаны);
+// жирное и курсив браузер догрузит сам
+const preload = [{ weight: '400', style: 'normal' }];
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const image = new URL(ogImage, Astro.site);
 const fullTitle = title === author ? title : `${title} — ${author}`;
