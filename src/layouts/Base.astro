@@ -100,9 +100,14 @@ const hreflang = altPath
         let theme = null;
         try { theme = localStorage.getItem('theme'); } catch {}
         if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
-        // Контент скрыт, пока не загрузятся шрифты (см. скрипт в конце body); страховка — 2,5 с
-        document.documentElement.classList.add('reveal');
-        setTimeout(() => document.documentElement.classList.add('revealed'), 2500);
+        // Контент скрыт, пока не загрузятся шрифты (см. скрипт в конце body); страховка — 2,5 с.
+        // Анимация появления — только при первом открытии сайта во вкладке; дальше шрифты в кэше,
+        // и страница просто показывается, как только они готовы (обычно за миллисекунды).
+        const root = document.documentElement;
+        let seen = false;
+        try { seen = sessionStorage.getItem('fonts-ready') === '1'; } catch {}
+        root.classList.add(seen ? 'fonts-wait' : 'reveal');
+        setTimeout(() => { root.classList.add('revealed'); root.classList.remove('fonts-wait'); }, 2500);
       })();
     </script>
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
@@ -124,7 +129,11 @@ const hreflang = altPath
         const vars = ['--font-mono', '--font-sans'].concat(document.querySelector('.prose') ? ['--font-serif'] : []);
         const fonts = Promise.all(vars.map((v) => document.fonts.load(`400 1em ${family(v)}`, 'Аa').catch(() => {})));
         const timeout = new Promise((resolve) => setTimeout(resolve, 1000));
-        Promise.race([fonts, timeout]).then(() => requestAnimationFrame(() => root.classList.add('revealed')));
+        Promise.race([fonts, timeout]).then(() => {
+          root.classList.remove('fonts-wait');
+          requestAnimationFrame(() => root.classList.add('revealed'));
+        });
+        fonts.then(() => { try { sessionStorage.setItem('fonts-ready', '1'); } catch {} });
       })();
     </script>
   </body>

@@ -80,6 +80,7 @@ body > main { flex: 1; }
    Классы reveal/revealed ставит скрипт в Base.astro; без JS всё видно сразу.
    Итоговое состояние — transform: none, чтобы не ломать position: fixed у кнопки «наверх» и зума. */
 html.reveal body > header, html.reveal main > *, html.reveal body > footer { opacity: 0; transform: translateY(18px); }
+html.fonts-wait body > header, html.fonts-wait main > *, html.fonts-wait body > footer { visibility: hidden; }
 html.revealed body > header, html.revealed main > *, html.revealed body > footer {
   opacity: 1; transform: none;
   transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
