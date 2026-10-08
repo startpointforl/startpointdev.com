@@ -115,6 +115,10 @@ const jsonLd = graph(
           {nav.next && <p><a href={ivLink(nav.next.id)}>Следующая часть: {nav.next.data.title} →</a></p>}
         </div>
       )}
+      <div class="iv-author" hidden>
+        <hr />
+        <p><b>Анастасия Котова</b> — senior frontend / full-stack разработчица. Больше статей — на <a href={`${SITE.url}/`}>startpointdev.com</a>, новые выходят в канале <a href={SITE.links.telegram}>@startpoint_dev</a>.</p>
+      </div>
     </footer>
   </article>
 </Base>
