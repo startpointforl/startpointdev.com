@@ -1,0 +1,16 @@
+# Сборка и деплой сайта на GitLab Pages.
+# Запускается при пуше в main, по расписанию (Build → Pipeline schedules: ежедневно открывает
+# отложенные статьи) и вручную (Build → Pipelines → Run pipeline).
+pages:
+  image: node:24
+  cache:
+    key:
+      files: [package-lock.json]
+    paths: [.npm/]
+  script:
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
+  pages:
+    publish: dist
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
